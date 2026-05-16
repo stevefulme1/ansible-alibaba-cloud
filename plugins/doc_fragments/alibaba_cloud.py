@@ -1,7 +1,5 @@
-#!/usr/bin/python
 # Copyright: (c) 2026, Steve Fulmer (@stevefulme1)
-# GNU General Public License v3.0+
-# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """Shared documentation fragment for Alibaba Cloud modules."""
 

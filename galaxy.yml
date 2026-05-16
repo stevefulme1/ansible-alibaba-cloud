@@ -10,7 +10,7 @@ description: >-
   Full-scope coverage of ECS, VPC, SLB, RAM, KMS, and more.
 license:
   - GPL-3.0-or-later
-license_file: ''
+license_file: LICENSE
 tags:
   - alibaba
   - alicloud
@@ -30,5 +30,6 @@ issues: https://github.com/stevefulme1/ansible-alibaba-cloud/issues
 build_ignore:
   - .github
   - tests
+  - changelogs
   - .gitignore
   - .DS_Store

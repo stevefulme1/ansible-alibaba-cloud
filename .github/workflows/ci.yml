@@ -8,105 +8,115 @@ on:
 
 jobs:
   lint:
-    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install ansible-core ansible-lint ruff
-      - run: ruff check --ignore E402 plugins/ tests/
-      - run: ruff format --check plugins/ tests/
-      - run: ansible-galaxy collection install ansible.windows community.windows 2>/dev/null || true
-      - run: ansible-lint --profile shared
+      - name: Install dependencies
+        run: |
+          pip install ruff ansible-core ansible-lint
+
+      - name: ruff check
+        run: ruff check --ignore E402 .
+
+      - name: ruff format --check
+        run: ruff format --check .
+
+      - name: ansible-lint
+        run: ansible-lint
 
   sanity:
-    name: Sanity (${{ matrix.ansible }} / py${{ matrix.python }})
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         include:
-          - ansible: "2.16"
+          - ansible-version: "2.16"
             python: "3.12"
-          - ansible: "2.17"
+          - ansible-version: "2.17"
             python: "3.12"
-          - ansible: "2.18"
+          - ansible-version: "2.18"
             python: "3.12"
-          - ansible: "2.18"
+          - ansible-version: "2.18"
             python: "3.13"
-          - ansible: "2.20"
+          - ansible-version: "2.20"
             python: "3.12"
-          - ansible: "2.20"
+          - ansible-version: "2.20"
             python: "3.13"
     steps:
       - uses: actions/checkout@v4
         with:
           path: ansible_collections/stevefulme1/alibaba_cloud
+
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python }}
-      - run: pip install "ansible-core~=${{ matrix.ansible }}.0"
+          python-version: "${{ matrix.python }}"
+
+      - name: Install Ansible ${{ matrix.ansible-version }}
+        run: pip install "ansible-core~=${{ matrix.ansible-version }}.0"
+
       - name: Run sanity tests
         working-directory: ansible_collections/stevefulme1/alibaba_cloud
         run: ansible-test sanity --python ${{ matrix.python }} -v --color yes
 
   unit:
-    name: Unit tests (py${{ matrix.python }})
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         python: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
         with:
           path: ansible_collections/stevefulme1/alibaba_cloud
+
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python }}
-      - run: pip install ansible-core pytest pytest-cov
+          python-version: "${{ matrix.python }}"
+
+      - name: Install dependencies
+        run: |
+          pip install "ansible-core>=2.16" pytest
+
       - name: Run unit tests
         working-directory: ansible_collections/stevefulme1/alibaba_cloud
-        run: >-
-          python -m pytest tests/unit/ -v --tb=short
+        run: python -m pytest tests/unit/ -v --tb=short
         env:
           PYTHONPATH: ${{ github.workspace }}
 
-  integration:
-    name: Integration (mock)
+  integration-mock:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
           path: ansible_collections/stevefulme1/alibaba_cloud
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install ansible-core
-      - name: Run integration tests
+
+      - name: Install dependencies
+        run: pip install "ansible-core>=2.16"
+
+      - name: Run integration tests (mock)
         working-directory: ansible_collections/stevefulme1/alibaba_cloud
-        run: >-
-          ansible-test integration --python 3.12 -v --color yes
-          --allow-unsupported
-        continue-on-error: true
+        run: ansible-test integration --allow-unsupported -v --color yes || true
 
   auto-merge:
-    name: Auto-merge owner PRs
-    runs-on: ubuntu-latest
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.actor == 'stevefulme1'
+    if: github.event_name == 'pull_request' && (github.actor == 'stevefulmer' || github.actor == 'sfulmer' || github.actor == 'stevefulme1')
     needs: [lint, sanity, unit]
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
     steps:
       - uses: hmarr/auto-approve-action@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: gh pr merge --auto --squash "$PR_URL"
+
+      - uses: actions/checkout@v4
+
+      - name: Auto-merge
+        run: gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
