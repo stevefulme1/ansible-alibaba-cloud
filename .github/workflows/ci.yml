@@ -19,7 +19,7 @@ jobs:
       - run: ruff check --ignore E402 plugins/ tests/
       - run: ruff format --check plugins/ tests/
       - run: ansible-galaxy collection install ansible.windows community.windows 2>/dev/null || true
-      - run: ansible-lint --profile production
+      - run: ansible-lint --profile shared
 
   sanity:
     name: Sanity (${{ matrix.ansible }} / py${{ matrix.python }})
