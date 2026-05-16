@@ -76,7 +76,7 @@ def main():
         ),
         db_instance_description=dict(type="str"),
         engine_version=dict(type="str"),
-        account_password=dict(type="str"),
+        account_password=dict(type="str", no_log=True),
         db_instance_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)

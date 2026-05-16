@@ -72,7 +72,7 @@ def main():
         ),
         product_name=dict(type="str"),
         node_type=dict(type="int"),
-        product_key=dict(type="str"),
+        product_key=dict(type="str", no_log=False),
     )
     spec.update(alibaba_argument_spec)
 

@@ -52,7 +52,7 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        product_key=dict(type="str"),
+        product_key=dict(type="str", no_log=False),
     )
     spec.update(alibaba_argument_spec)
 
