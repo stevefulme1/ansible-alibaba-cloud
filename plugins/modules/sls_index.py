@@ -78,7 +78,7 @@ def main():
         project_name=dict(type="str"),
         logstore_name=dict(type="str"),
         full_text_index=dict(type="bool"),
-        keys=dict(type="dict"),
+        keys=dict(type="dict", no_log=False),
     )
     spec.update(alibaba_argument_spec)
 
