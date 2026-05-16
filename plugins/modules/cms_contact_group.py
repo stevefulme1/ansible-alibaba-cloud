@@ -36,6 +36,7 @@ options:
   contact_names:
     description: List of contact names in the group.
     type: list
+    elements: str
 """
 
 EXAMPLES = r"""
@@ -67,7 +68,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         contact_group_name=dict(type="str"),
         describe=dict(type="str"),
-        contact_names=dict(type="list"),
+        contact_names=dict(type="list", elements="str"),
     )
     spec.update(alibaba_argument_spec)
 

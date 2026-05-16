@@ -39,12 +39,14 @@ options:
   instance_types:
     description: Instance type list.
     type: list
+    elements: str
   desired_size:
     description: Desired number of nodes.
     type: int
   vswitch_ids:
     description: VSwitch IDs for the node pool.
     type: list
+    elements: str
 """
 
 EXAMPLES = r"""
@@ -77,9 +79,9 @@ def main():
         cluster_id=dict(type="str"),
         nodepool_id=dict(type="str"),
         name=dict(type="str"),
-        instance_types=dict(type="list"),
+        instance_types=dict(type="list", elements="str"),
         desired_size=dict(type="int"),
-        vswitch_ids=dict(type="list"),
+        vswitch_ids=dict(type="list", elements="str"),
     )
     spec.update(alibaba_argument_spec)
 

@@ -36,6 +36,7 @@ options:
   source_ips:
     description: List of origin server IPs.
     type: list
+    elements: str
   is_access_product:
     description: Whether using a proxy.
     type: int
@@ -71,7 +72,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         instance_id=dict(type="str"),
         domain=dict(type="str"),
-        source_ips=dict(type="list"),
+        source_ips=dict(type="list", elements="str"),
         is_access_product=dict(type="int", choices=[0, 1]),
     )
     spec.update(alibaba_argument_spec)

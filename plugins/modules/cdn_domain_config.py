@@ -31,6 +31,7 @@ options:
   function_args:
     description: List of function argument dicts.
     type: list
+    elements: dict
 """
 
 EXAMPLES = r"""
@@ -61,7 +62,7 @@ def main():
     spec = dict(
         domain_name=dict(type="str"),
         function_name=dict(type="str"),
-        function_args=dict(type="list"),
+        function_args=dict(type="list", elements="dict"),
     )
     spec.update(alibaba_argument_spec)
 

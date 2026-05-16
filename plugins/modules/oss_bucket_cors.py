@@ -33,12 +33,15 @@ options:
   allowed_origins:
     description: Allowed CORS origins.
     type: list
+    elements: str
   allowed_methods:
     description: Allowed HTTP methods.
     type: list
+    elements: str
   allowed_headers:
     description: Allowed request headers.
     type: list
+    elements: str
 """
 
 EXAMPLES = r"""
@@ -69,9 +72,9 @@ def main():
     spec = dict(
         state=dict(type="str", choices=["present", "absent"], default="present"),
         bucket_name=dict(type="str"),
-        allowed_origins=dict(type="list"),
-        allowed_methods=dict(type="list"),
-        allowed_headers=dict(type="list"),
+        allowed_origins=dict(type="list", elements="str"),
+        allowed_methods=dict(type="list", elements="str"),
+        allowed_headers=dict(type="list", elements="str"),
     )
     spec.update(alibaba_argument_spec)
 

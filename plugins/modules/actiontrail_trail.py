@@ -74,7 +74,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         name=dict(type="str"),
         oss_bucket_name=dict(type="str"),
-        oss_key_prefix=dict(type="str"),
+        oss_key_prefix=dict(type="str", no_log=False),
         sls_project_arn=dict(type="str"),
         trail_region=dict(type="str", choices=["All", "cn-hangzhou"]),
     )

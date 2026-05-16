@@ -46,6 +46,7 @@ options:
   vswitch_ids:
     description: List of VSwitch IDs.
     type: list
+    elements: str
 """
 
 EXAMPLES = r"""
@@ -80,7 +81,7 @@ def main():
         cluster_type=dict(type="str", choices=["Kubernetes", "ManagedKubernetes"]),
         kubernetes_version=dict(type="str"),
         vpcid=dict(type="str"),
-        vswitch_ids=dict(type="list"),
+        vswitch_ids=dict(type="list", elements="str"),
     )
     spec.update(alibaba_argument_spec)
 
