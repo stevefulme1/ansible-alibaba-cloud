@@ -13,7 +13,6 @@ import json
 import urllib.parse
 import uuid
 
-from ansible.module_utils.basic import AnsibleModule  # noqa: F401
 from ansible.module_utils.urls import open_url
 
 

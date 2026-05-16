@@ -7,13 +7,6 @@
 
 from __future__ import annotations
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
-    AlibabaCloudClient,
-    AlibabaCloudError,
-    alibaba_argument_spec,
-)
-
 
 DOCUMENTATION = r"""
 ---
@@ -57,6 +50,13 @@ role:
   returned: success
   type: dict
 """
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
+    AlibabaCloudClient,
+    AlibabaCloudError,
+    alibaba_argument_spec,
+)
 
 
 def main():
