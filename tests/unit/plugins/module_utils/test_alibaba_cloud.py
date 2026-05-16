@@ -1,6 +1,8 @@
 """Unit tests for the Alibaba Cloud API client."""
 
-from __future__ import annotations
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 
 
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (

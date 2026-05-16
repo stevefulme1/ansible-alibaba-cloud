@@ -1,6 +1,8 @@
 """Unit tests for ram_user module."""
 
-from __future__ import annotations
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 
 
 class TestRamUserDocumentation:
