@@ -57,7 +57,7 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 def main():
     spec = dict(
         resource_type=dict(type="str", required=True),
-        tag_key=dict(type="str"),
+        tag_key=dict(type="str", no_log=False),
     )
     spec.update(alibaba_argument_spec)
 
