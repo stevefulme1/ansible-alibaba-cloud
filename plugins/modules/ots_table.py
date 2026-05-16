@@ -69,7 +69,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         instance_name=dict(type="str", required=True),
         table_name=dict(type="str"),
-        primary_keys=dict(type="list", elements="dict"),
+        primary_keys=dict(type="list", elements="dict", no_log=False),
     )
     spec.update(alibaba_argument_spec)
 
