@@ -1,0 +1,61 @@
+---
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ansible-lint ruff
+      - run: ruff check plugins/
+      - run: ansible-lint
+
+  sanity:
+    name: Sanity (Ansible ${{ matrix.ansible }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible:
+          - "2.16"
+          - "2.17"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ansible_collections/stevefulme1/alibaba_cloud
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Ansible
+        run: pip install "ansible-core~=${{ matrix.ansible }}.0"
+      - name: Run sanity tests
+        working-directory: >-
+          ansible_collections/stevefulme1/alibaba_cloud
+        run: >-
+          ansible-test sanity --docker default
+          -v --color --coverage
+
+  auto-merge:
+    name: Auto-merge owner PRs
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.actor == 'stevefulme1'
+    needs: [lint, sanity]
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ github.token }}

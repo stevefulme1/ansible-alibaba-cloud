@@ -1,0 +1,35 @@
+---
+namespace: stevefulme1
+name: alibaba_cloud
+version: 1.0.0
+readme: README.md
+authors:
+  - Steve Fulmer (@stevefulme1)
+description: >-
+  Ansible collection for managing Alibaba Cloud resources.
+  Full-scope coverage of ECS, VPC, SLB, RAM, KMS, and more.
+license:
+  - GPL-3.0-or-later
+license_file: ''
+tags:
+  - alibaba
+  - alicloud
+  - cloud
+  - ecs
+  - oss
+  - vpc
+  - rds
+  - ram
+  - infrastructure
+  - automation
+dependencies: {}
+repository: https://github.com/stevefulme1/ansible-alibaba-cloud
+documentation: https://github.com/stevefulme1/ansible-alibaba-cloud
+homepage: https://github.com/stevefulme1/ansible-alibaba-cloud
+issues: https://github.com/stevefulme1/ansible-alibaba-cloud/issues
+requires_ansible: ">=2.16.0"
+build_ignore:
+  - .github
+  - tests
+  - .gitignore
+  - .DS_Store
