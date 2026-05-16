@@ -27,7 +27,6 @@ repository: https://github.com/stevefulme1/ansible-alibaba-cloud
 documentation: https://github.com/stevefulme1/ansible-alibaba-cloud
 homepage: https://github.com/stevefulme1/ansible-alibaba-cloud
 issues: https://github.com/stevefulme1/ansible-alibaba-cloud/issues
-requires_ansible: ">=2.16.0"
 build_ignore:
   - .github
   - tests

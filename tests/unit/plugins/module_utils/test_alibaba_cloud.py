@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock
 
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
