@@ -17,7 +17,8 @@ module: waf_instance
 short_description: Manage WAF instances.
 description:
   - Create, update, or delete Alibaba Cloud WAF instance resources.
-  - Supports check mode and is idempotent.version_added: "1.0.0"
+  - Supports check mode and is idempotent.
+version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud

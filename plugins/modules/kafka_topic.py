@@ -17,7 +17,8 @@ module: kafka_topic
 short_description: Manage Kafka topics.
 description:
   - Create, update, or delete Alibaba Cloud Kafka topic resources.
-  - Supports check mode and is idempotent.version_added: "1.0.0"
+  - Supports check mode and is idempotent.
+version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud

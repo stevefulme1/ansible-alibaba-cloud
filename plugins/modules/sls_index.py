@@ -17,7 +17,8 @@ module: sls_index
 short_description: Manage SLS logstore index configuration.
 description:
   - Create, update, or delete Alibaba Cloud SLS index resources.
-  - Supports check mode and is idempotent.version_added: "1.0.0"
+  - Supports check mode and is idempotent.
+version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
