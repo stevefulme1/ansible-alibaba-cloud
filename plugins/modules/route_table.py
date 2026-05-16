@@ -65,7 +65,8 @@ route_table:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         route_table_name=dict(type="str"),
@@ -93,7 +94,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeRouteTableList", {},
+            "DescribeRouteTableList",
+            {},
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -109,7 +111,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateRouteTable", {},
+                    "CreateRouteTable",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -117,14 +120,16 @@ def main():
                 module.exit_json(changed=changed, route_table=result)
             else:
                 module.exit_json(
-                    changed=False, route_table=data[0],
+                    changed=False,
+                    route_table=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteRouteTable", {},
+                    "DeleteRouteTable",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

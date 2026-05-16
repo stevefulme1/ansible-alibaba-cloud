@@ -62,7 +62,8 @@ role:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         role_name=dict(type="str", required=True),
@@ -89,7 +90,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "ListRoles", {},
+            "ListRoles",
+            {},
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -105,7 +107,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateRole", {},
+                    "CreateRole",
+                    {},
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -113,14 +116,16 @@ def main():
                 module.exit_json(changed=changed, ram_role=result)
             else:
                 module.exit_json(
-                    changed=False, ram_role=data[0],
+                    changed=False,
+                    ram_role=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteRole", {},
+                    "DeleteRole",
+                    {},
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )

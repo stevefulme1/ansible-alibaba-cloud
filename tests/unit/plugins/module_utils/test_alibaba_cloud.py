@@ -31,7 +31,9 @@ class TestAlibabaCloudClient:
         assert client.region_id == "cn-hangzhou"
 
     def test_client_init_with_security_token(self):
-        client = AlibabaCloudClient("key-id", "key-secret", "cn-hangzhou", security_token="sts")
+        client = AlibabaCloudClient(
+            "key-id", "key-secret", "cn-hangzhou", security_token="sts"
+        )
         assert client.security_token == "sts"
 
 

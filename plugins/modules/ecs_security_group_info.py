@@ -70,7 +70,8 @@ def main():
     params = {}
     try:
         result = client.get(
-            "DescribeSecurityGroups", params,
+            "DescribeSecurityGroups",
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )

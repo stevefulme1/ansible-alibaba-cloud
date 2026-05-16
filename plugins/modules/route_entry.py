@@ -75,16 +75,22 @@ route_entry:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         route_table_id=dict(type="str", required=True),
         destination_cidr_block=dict(type="str"),
         next_hop_id=dict(type="str"),
-        next_hop_type=dict(type="str", choices=[
-            "Instance", "RouterInterface",
-            "VpnGateway", "NatGateway",
-        ]),
+        next_hop_type=dict(
+            type="str",
+            choices=[
+                "Instance",
+                "RouterInterface",
+                "VpnGateway",
+                "NatGateway",
+            ],
+        ),
         route_entry_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
@@ -108,7 +114,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeRouteEntryList", {},
+            "DescribeRouteEntryList",
+            {},
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -124,7 +131,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateRouteEntry", {},
+                    "CreateRouteEntry",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -132,14 +140,16 @@ def main():
                 module.exit_json(changed=changed, route_entry=result)
             else:
                 module.exit_json(
-                    changed=False, route_entry=data[0],
+                    changed=False,
+                    route_entry=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteRouteEntry", {},
+                    "DeleteRouteEntry",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

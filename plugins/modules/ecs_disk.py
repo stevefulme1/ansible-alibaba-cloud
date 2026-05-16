@@ -73,7 +73,8 @@ disk:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         disk_name=dict(type="str"),
@@ -103,7 +104,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeDisks", {},
+            "DescribeDisks",
+            {},
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -119,7 +121,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateDisk", {},
+                    "CreateDisk",
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -127,14 +130,16 @@ def main():
                 module.exit_json(changed=changed, ecs_disk=result)
             else:
                 module.exit_json(
-                    changed=False, ecs_disk=data[0],
+                    changed=False,
+                    ecs_disk=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteDisk", {},
+                    "DeleteDisk",
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

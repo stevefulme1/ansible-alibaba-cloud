@@ -68,7 +68,8 @@ attachment:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         group_name=dict(type="str", required=True),
@@ -96,7 +97,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "ListPoliciesForGroup", {},
+            "ListPoliciesForGroup",
+            {},
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -112,7 +114,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "AttachPolicyToGroup", {},
+                    "AttachPolicyToGroup",
+                    {},
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -120,14 +123,16 @@ def main():
                 module.exit_json(changed=changed, ram_group_policy_attachment=result)
             else:
                 module.exit_json(
-                    changed=False, ram_group_policy_attachment=data[0],
+                    changed=False,
+                    ram_group_policy_attachment=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DetachPolicyFromGroup", {},
+                    "DetachPolicyFromGroup",
+                    {},
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )

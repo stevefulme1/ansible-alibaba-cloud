@@ -73,13 +73,14 @@ load_balancer:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         load_balancer_name=dict(type="str"),
-        address_type=dict(type="str",
-                          choices=["internet", "intranet"],
-                          default="internet"),
+        address_type=dict(
+            type="str", choices=["internet", "intranet"], default="internet"
+        ),
         vpc_id=dict(type="str"),
         vswitch_id=dict(type="str"),
         load_balancer_id=dict(type="str"),
@@ -105,7 +106,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeLoadBalancers", {},
+            "DescribeLoadBalancers",
+            {},
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )
@@ -121,7 +123,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateLoadBalancer", {},
+                    "CreateLoadBalancer",
+                    {},
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
@@ -129,14 +132,16 @@ def main():
                 module.exit_json(changed=changed, slb_instance=result)
             else:
                 module.exit_json(
-                    changed=False, slb_instance=data[0],
+                    changed=False,
+                    slb_instance=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteLoadBalancer", {},
+                    "DeleteLoadBalancer",
+                    {},
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )

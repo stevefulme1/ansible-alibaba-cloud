@@ -70,7 +70,8 @@ def main():
     params = {}
     try:
         result = client.get(
-            "DescribeLoadBalancers", params,
+            "DescribeLoadBalancers",
+            params,
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )

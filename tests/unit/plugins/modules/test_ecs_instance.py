@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 
-
-
 class TestEcsInstanceArgSpec:
     """Test that the module argument spec is valid."""
 
@@ -12,9 +10,13 @@ class TestEcsInstanceArgSpec:
         from ansible_collections.stevefulme1.alibaba_cloud.plugins.modules.ecs_instance import (
             DOCUMENTATION,
         )
+
         assert "instance_name" in DOCUMENTATION or "name" in DOCUMENTATION
         assert "state" in DOCUMENTATION
-        assert "region_id" in DOCUMENTATION or "extends_documentation_fragment" in DOCUMENTATION
+        assert (
+            "region_id" in DOCUMENTATION
+            or "extends_documentation_fragment" in DOCUMENTATION
+        )
 
 
 class TestEcsInstanceIdempotency:
@@ -24,6 +26,7 @@ class TestEcsInstanceIdempotency:
         from ansible_collections.stevefulme1.alibaba_cloud.plugins.modules.ecs_instance import (
             DOCUMENTATION,
         )
+
         assert "instance_type" in DOCUMENTATION
 
 
@@ -34,10 +37,12 @@ class TestEcsInstanceDocumentation:
         from ansible_collections.stevefulme1.alibaba_cloud.plugins.modules.ecs_instance import (
             EXAMPLES,
         )
+
         assert len(EXAMPLES) > 0
 
     def test_has_return(self):
         from ansible_collections.stevefulme1.alibaba_cloud.plugins.modules.ecs_instance import (
             RETURN,
         )
+
         assert len(RETURN) > 0

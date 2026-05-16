@@ -70,7 +70,8 @@ def main():
     params = {}
     try:
         result = client.get(
-            "ListKeys", params,
+            "ListKeys",
+            params,
             service_endpoint="kms.aliyuncs.com",
             api_version="2016-01-20",
         )

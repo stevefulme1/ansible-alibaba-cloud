@@ -65,7 +65,8 @@ vpc:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         vpc_name=dict(type="str"),
@@ -93,7 +94,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeVpcs", {},
+            "DescribeVpcs",
+            {},
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -109,7 +111,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateVpc", {},
+                    "CreateVpc",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -117,14 +120,16 @@ def main():
                 module.exit_json(changed=changed, vpc=result)
             else:
                 module.exit_json(
-                    changed=False, vpc=data[0],
+                    changed=False,
+                    vpc=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteVpc", {},
+                    "DeleteVpc",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

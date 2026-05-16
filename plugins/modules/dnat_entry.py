@@ -82,7 +82,8 @@ dnat_entry:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         forward_table_id=dict(type="str", required=True),
@@ -114,7 +115,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeForwardTableEntries", {},
+            "DescribeForwardTableEntries",
+            {},
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -130,7 +132,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateForwardEntry", {},
+                    "CreateForwardEntry",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -138,14 +141,16 @@ def main():
                 module.exit_json(changed=changed, dnat_entry=result)
             else:
                 module.exit_json(
-                    changed=False, dnat_entry=data[0],
+                    changed=False,
+                    dnat_entry=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteForwardEntry", {},
+                    "DeleteForwardEntry",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

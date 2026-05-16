@@ -77,7 +77,8 @@ vpn_connection:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         vpn_connection_name=dict(type="str"),
@@ -108,7 +109,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeVpnConnections", {},
+            "DescribeVpnConnections",
+            {},
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -124,7 +126,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateVpnConnection", {},
+                    "CreateVpnConnection",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -132,14 +135,16 @@ def main():
                 module.exit_json(changed=changed, vpn_connection=result)
             else:
                 module.exit_json(
-                    changed=False, vpn_connection=data[0],
+                    changed=False,
+                    vpn_connection=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteVpnConnection", {},
+                    "DeleteVpnConnection",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

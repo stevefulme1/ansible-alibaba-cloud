@@ -75,16 +75,20 @@ scaling_rule:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         scaling_group_id=dict(type="str", required=True),
         scaling_rule_name=dict(type="str"),
-        adjustment_type=dict(type="str", choices=[
-            "QuantityChangeInCapacity",
-            "PercentChangeInCapacity",
-            "TotalCapacity",
-        ]),
+        adjustment_type=dict(
+            type="str",
+            choices=[
+                "QuantityChangeInCapacity",
+                "PercentChangeInCapacity",
+                "TotalCapacity",
+            ],
+        ),
         adjustment_value=dict(type="int"),
         scaling_rule_id=dict(type="str"),
     )
@@ -109,7 +113,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeScalingRules", {},
+            "DescribeScalingRules",
+            {},
             service_endpoint="ess.aliyuncs.com",
             api_version="2014-08-28",
         )
@@ -125,7 +130,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateScalingRule", {},
+                    "CreateScalingRule",
+                    {},
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )
@@ -133,14 +139,16 @@ def main():
                 module.exit_json(changed=changed, ecs_auto_scaling_rule=result)
             else:
                 module.exit_json(
-                    changed=False, ecs_auto_scaling_rule=data[0],
+                    changed=False,
+                    ecs_auto_scaling_rule=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteScalingRule", {},
+                    "DeleteScalingRule",
+                    {},
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )

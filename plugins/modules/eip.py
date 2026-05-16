@@ -62,7 +62,8 @@ eip:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         bandwidth=dict(type="int", default=5),
@@ -89,7 +90,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeEipAddresses", {},
+            "DescribeEipAddresses",
+            {},
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -105,7 +107,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "AllocateEipAddress", {},
+                    "AllocateEipAddress",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -113,14 +116,16 @@ def main():
                 module.exit_json(changed=changed, eip=result)
             else:
                 module.exit_json(
-                    changed=False, eip=data[0],
+                    changed=False,
+                    eip=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "ReleaseEipAddress", {},
+                    "ReleaseEipAddress",
+                    {},
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

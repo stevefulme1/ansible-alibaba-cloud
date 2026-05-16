@@ -73,9 +73,7 @@ class AlibabaCloudClient:
         )
         string_to_sign = f"GET&%2F&{self._percent_encode(query)}"
         key = f"{self.access_key_secret}&".encode("utf-8")
-        digest = hmac.new(
-            key, string_to_sign.encode("utf-8"), hashlib.sha256
-        ).digest()
+        digest = hmac.new(key, string_to_sign.encode("utf-8"), hashlib.sha256).digest()
         import base64
 
         return base64.b64encode(digest).decode("utf-8")
@@ -84,8 +82,7 @@ class AlibabaCloudClient:
     #  Core request method
     # ------------------------------------------------------------------ #
 
-    def request(self, action, params=None, service_endpoint=None,
-                api_version=None):
+    def request(self, action, params=None, service_endpoint=None, api_version=None):
         """Send a signed request to the Alibaba Cloud API.
 
         Args:
@@ -109,9 +106,7 @@ class AlibabaCloudClient:
             "Version": api_version or self.API_VERSION,
             "AccessKeyId": self.access_key_id,
             "SignatureMethod": "HMAC-SHA256",
-            "Timestamp": datetime.datetime.utcnow().strftime(
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),
+            "Timestamp": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
             "SignatureVersion": "1.0",
             "SignatureNonce": str(uuid.uuid4()),
             "RegionId": self.region_id,
@@ -129,15 +124,11 @@ class AlibabaCloudClient:
         url = f"https://{service_endpoint}/?{query_string}"
 
         try:
-            resp = open_url(
-                url, method="GET", timeout=self.timeout
-            )
+            resp = open_url(url, method="GET", timeout=self.timeout)
             body = resp.read().decode("utf-8")
             return json.loads(body)
         except Exception as exc:
-            raise AlibabaCloudError(
-                f"API request failed: {exc}"
-            ) from exc
+            raise AlibabaCloudError(f"API request failed: {exc}") from exc
 
     # ------------------------------------------------------------------ #
     #  Convenience HTTP verbs (all delegate to request)

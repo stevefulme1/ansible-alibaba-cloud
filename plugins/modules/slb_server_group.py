@@ -70,7 +70,8 @@ server_group:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         load_balancer_id=dict(type="str", required=True),
@@ -99,7 +100,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeVServerGroups", {},
+            "DescribeVServerGroups",
+            {},
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )
@@ -115,7 +117,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateVServerGroup", {},
+                    "CreateVServerGroup",
+                    {},
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
@@ -123,14 +126,16 @@ def main():
                 module.exit_json(changed=changed, slb_server_group=result)
             else:
                 module.exit_json(
-                    changed=False, slb_server_group=data[0],
+                    changed=False,
+                    slb_server_group=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteVServerGroup", {},
+                    "DeleteVServerGroup",
+                    {},
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )

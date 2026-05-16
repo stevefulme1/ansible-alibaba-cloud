@@ -70,7 +70,8 @@ def main():
     params = {}
     try:
         result = client.get(
-            "ListGroups", params,
+            "ListGroups",
+            params,
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )

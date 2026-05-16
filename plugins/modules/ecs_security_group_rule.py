@@ -76,15 +76,15 @@ rule:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         security_group_id=dict(type="str", required=True),
         ip_protocol=dict(type="str"),
         port_range=dict(type="str"),
         source_cidr_ip=dict(type="str"),
-        direction=dict(type="str", choices=["ingress", "egress"],
-                       default="ingress"),
+        direction=dict(type="str", choices=["ingress", "egress"], default="ingress"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -107,7 +107,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeSecurityGroupAttribute", {},
+            "DescribeSecurityGroupAttribute",
+            {},
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -123,7 +124,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "AuthorizeSecurityGroup", {},
+                    "AuthorizeSecurityGroup",
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -131,14 +133,16 @@ def main():
                 module.exit_json(changed=changed, ecs_security_group_rule=result)
             else:
                 module.exit_json(
-                    changed=False, ecs_security_group_rule=data[0],
+                    changed=False,
+                    ecs_security_group_rule=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "RevokeSecurityGroup", {},
+                    "RevokeSecurityGroup",
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

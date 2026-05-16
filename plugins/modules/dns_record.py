@@ -74,7 +74,8 @@ record:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         domain_name=dict(type="str", required=True),
@@ -104,7 +105,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeDomainRecords", {},
+            "DescribeDomainRecords",
+            {},
             service_endpoint="alidns.aliyuncs.com",
             api_version="2015-01-09",
         )
@@ -120,7 +122,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "AddDomainRecord", {},
+                    "AddDomainRecord",
+                    {},
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )
@@ -128,14 +131,16 @@ def main():
                 module.exit_json(changed=changed, dns_record=result)
             else:
                 module.exit_json(
-                    changed=False, dns_record=data[0],
+                    changed=False,
+                    dns_record=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteDomainRecord", {},
+                    "DeleteDomainRecord",
+                    {},
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )

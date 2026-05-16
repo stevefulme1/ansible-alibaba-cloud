@@ -73,7 +73,8 @@ scaling_group:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         scaling_group_name=dict(type="str"),
@@ -103,7 +104,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeScalingGroups", {},
+            "DescribeScalingGroups",
+            {},
             service_endpoint="ess.aliyuncs.com",
             api_version="2014-08-28",
         )
@@ -119,7 +121,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateScalingGroup", {},
+                    "CreateScalingGroup",
+                    {},
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )
@@ -127,14 +130,16 @@ def main():
                 module.exit_json(changed=changed, ecs_auto_scaling_group=result)
             else:
                 module.exit_json(
-                    changed=False, ecs_auto_scaling_group=data[0],
+                    changed=False,
+                    ecs_auto_scaling_group=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteScalingGroup", {},
+                    "DeleteScalingGroup",
+                    {},
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )

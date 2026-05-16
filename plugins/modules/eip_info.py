@@ -70,7 +70,8 @@ def main():
     params = {}
     try:
         result = client.get(
-            "DescribeEipAddresses", params,
+            "DescribeEipAddresses",
+            params,
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )

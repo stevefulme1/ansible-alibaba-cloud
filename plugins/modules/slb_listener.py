@@ -77,16 +77,17 @@ listener:
 def main():
     spec = dict(
         state=dict(
-            type="str", choices=["present", "absent"],
+            type="str",
+            choices=["present", "absent"],
             default="present",
         ),
         load_balancer_id=dict(type="str", required=True),
         listener_port=dict(type="int", required=True),
         backend_server_port=dict(type="int"),
         bandwidth=dict(type="int", default=-1),
-        protocol=dict(type="str",
-                      choices=["tcp", "udp", "http", "https"],
-                      default="tcp"),
+        protocol=dict(
+            type="str", choices=["tcp", "udp", "http", "https"], default="tcp"
+        ),
     )
     spec.update(alibaba_argument_spec)
 
@@ -109,7 +110,8 @@ def main():
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
-            "DescribeLoadBalancerListeners", {},
+            "DescribeLoadBalancerListeners",
+            {},
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )
@@ -125,7 +127,8 @@ def main():
                 if module.check_mode:
                     module.exit_json(changed=True)
                 result = client.get(
-                    "CreateLoadBalancerTCPListener", {},
+                    "CreateLoadBalancerTCPListener",
+                    {},
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
@@ -133,14 +136,16 @@ def main():
                 module.exit_json(changed=changed, slb_listener=result)
             else:
                 module.exit_json(
-                    changed=False, slb_listener=data[0],
+                    changed=False,
+                    slb_listener=data[0],
                 )
         else:
             if data:
                 if module.check_mode:
                     module.exit_json(changed=True)
                 client.get(
-                    "DeleteLoadBalancerListener", {},
+                    "DeleteLoadBalancerListener",
+                    {},
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
