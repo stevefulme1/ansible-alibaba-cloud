@@ -21,7 +21,7 @@ version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
-options:
+options: {}
 """
 
 EXAMPLES = r"""
