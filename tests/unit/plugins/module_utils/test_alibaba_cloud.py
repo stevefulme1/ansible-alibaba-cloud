@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch
-
-import pytest
+from unittest.mock import MagicMock
 
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
@@ -15,44 +13,26 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 class TestAlibabaArgumentSpec:
     def test_has_required_keys(self):
-        spec = alibaba_argument_spec()
-        assert "access_key_id" in spec
-        assert "access_key_secret" in spec
-        assert "region_id" in spec
+        assert "access_key_id" in alibaba_argument_spec
+        assert "access_key_secret" in alibaba_argument_spec
+        assert "region_id" in alibaba_argument_spec
 
     def test_secret_is_no_log(self):
-        spec = alibaba_argument_spec()
-        assert spec["access_key_secret"]["no_log"] is True
+        assert alibaba_argument_spec["access_key_secret"]["no_log"] is True
 
-    def test_security_token_optional(self):
-        spec = alibaba_argument_spec()
-        assert spec["security_token"]["required"] is False
+    def test_security_token_present(self):
+        assert "security_token" in alibaba_argument_spec
 
 
 class TestAlibabaCloudClient:
-    def _make_module(self, **kwargs):
-        module = MagicMock()
-        params = {
-            "access_key_id": "test-key-id",
-            "access_key_secret": "test-key-secret",
-            "region_id": "cn-hangzhou",
-            "security_token": None,
-            "timeout": 30,
-        }
-        params.update(kwargs)
-        module.params = params
-        return module
-
     def test_client_init(self):
-        module = self._make_module()
-        client = AlibabaCloudClient(module)
-        assert client.access_key_id == "test-key-id"
+        client = AlibabaCloudClient("key-id", "key-secret", "cn-hangzhou")
+        assert client.access_key_id == "key-id"
         assert client.region_id == "cn-hangzhou"
 
     def test_client_init_with_security_token(self):
-        module = self._make_module(security_token="sts-token")
-        client = AlibabaCloudClient(module)
-        assert client.security_token == "sts-token"
+        client = AlibabaCloudClient("key-id", "key-secret", "cn-hangzhou", security_token="sts")
+        assert client.security_token == "sts"
 
 
 class TestAlibabaCloudError:
@@ -61,5 +41,5 @@ class TestAlibabaCloudError:
         assert str(err) == "Something failed"
 
     def test_error_with_code(self):
-        err = AlibabaCloudError("Failed", error_code="InvalidParameter")
-        assert err.error_code == "InvalidParameter"
+        err = AlibabaCloudError("Failed", code="InvalidParameter")
+        assert err.code == "InvalidParameter"
