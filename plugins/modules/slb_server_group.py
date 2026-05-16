@@ -5,7 +5,9 @@
 
 """Ansible module: stevefulme1.alibaba_cloud.slb_server_group"""
 
-from __future__ import annotations
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 
 
 DOCUMENTATION = r"""

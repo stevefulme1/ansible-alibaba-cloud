@@ -4,7 +4,9 @@
 
 """Alibaba Cloud shared module utilities."""
 
-from __future__ import annotations
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
 
 import datetime
 import hashlib
