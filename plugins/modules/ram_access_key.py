@@ -67,7 +67,7 @@ def main():
             default="present",
         ),
         user_name=dict(type="str", required=True),
-        access_key_id_param=dict(type="str"),
+        access_key_id_param=dict(type="str", no_log=False),
     )
     spec.update(alibaba_argument_spec)
 
