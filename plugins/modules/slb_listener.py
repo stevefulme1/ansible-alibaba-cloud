@@ -87,9 +87,7 @@ def main():
         listener_port=dict(type="int", required=True),
         backend_server_port=dict(type="int"),
         bandwidth=dict(type="int", default=-1),
-        protocol=dict(
-            type="str", choices=["tcp", "udp", "http", "https"], default="tcp"
-        ),
+        protocol=dict(type="str", choices=["tcp", "udp", "http", "https"], default="tcp"),
     )
     spec.update(alibaba_argument_spec)
 

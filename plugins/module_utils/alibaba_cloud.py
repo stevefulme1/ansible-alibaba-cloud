@@ -68,10 +68,7 @@ class AlibabaCloudClient:
     def _sign(self, params):
         """Compute SignatureVersion=1.0 HMAC-SHA256 signature."""
         sorted_params = sorted(params.items())
-        query = "&".join(
-            f"{self._percent_encode(k)}={self._percent_encode(v)}"
-            for k, v in sorted_params
-        )
+        query = "&".join(f"{self._percent_encode(k)}={self._percent_encode(v)}" for k, v in sorted_params)
         string_to_sign = f"GET&%2F&{self._percent_encode(query)}"
         key = f"{self.access_key_secret}&".encode("utf-8")
         digest = hmac.new(key, string_to_sign.encode("utf-8"), hashlib.sha256).digest()

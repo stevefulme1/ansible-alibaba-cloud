@@ -80,9 +80,7 @@ def main():
             default="present",
         ),
         load_balancer_name=dict(type="str"),
-        address_type=dict(
-            type="str", choices=["internet", "intranet"], default="internet"
-        ),
+        address_type=dict(type="str", choices=["internet", "intranet"], default="internet"),
         vpc_id=dict(type="str"),
         vswitch_id=dict(type="str"),
         load_balancer_id=dict(type="str"),

@@ -82,9 +82,7 @@ def main():
     spec = dict(
         state=dict(type="str", choices=["present", "absent"], default="present"),
         db_cluster_id=dict(type="str"),
-        db_type=dict(
-            type="str", choices=["MySQL", "PostgreSQL", "Oracle"], default="MySQL"
-        ),
+        db_type=dict(type="str", choices=["MySQL", "PostgreSQL", "Oracle"], default="MySQL"),
         db_version=dict(type="str"),
         pay_type=dict(type="str", choices=["Postpaid", "Prepaid"], default="Postpaid"),
         db_node_class=dict(type="str"),

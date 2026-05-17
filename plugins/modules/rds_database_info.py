@@ -65,8 +65,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type='int', default=100),
-        offset=dict(type='int', default=0),
+        limit=dict(type="int", default=100),
+        offset=dict(type="int", default=0),
         db_instance_id=dict(type="str"),
         db_name=dict(type="str"),
     )

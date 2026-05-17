@@ -68,9 +68,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         aggregator_id=dict(type="str"),
         aggregator_name=dict(type="str"),
-        aggregator_type=dict(
-            type="str", choices=["ACCOUNT", "FOLDER", "RESOURCE_DIRECTORY"]
-        ),
+        aggregator_type=dict(type="str", choices=["ACCOUNT", "FOLDER", "RESOURCE_DIRECTORY"]),
     )
     spec.update(alibaba_argument_spec)
 
