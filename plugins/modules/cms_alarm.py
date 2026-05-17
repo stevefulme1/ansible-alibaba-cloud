@@ -112,11 +112,32 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("rule_id") is not None:
+        params["RuleId"] = module.params["rule_id"]
+    if module.params.get("rule_name") is not None:
+        params["RuleName"] = module.params["rule_name"]
+    if module.params.get("namespace") is not None:
+        params["Namespace"] = module.params["namespace"]
+    if module.params.get("metric_name") is not None:
+        params["MetricName"] = module.params["metric_name"]
+    if module.params.get("period") is not None:
+        params["Period"] = module.params["period"]
+    if module.params.get("threshold") is not None:
+        params["Threshold"] = module.params["threshold"]
+    if module.params.get("comparison_operator") is not None:
+        params["ComparisonOperator"] = module.params["comparison_operator"]
+    if module.params.get("statistics") is not None:
+        params["Statistics"] = module.params["statistics"]
+    if module.params.get("contact_groups") is not None:
+        params["ContactGroups"] = module.params["contact_groups"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeMetricRuleList",
-            {},
+            params,
             service_endpoint="metrics.aliyuncs.com",
             api_version="2019-01-01",
         )
@@ -133,7 +154,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutResourceMetricRule",
-                    {},
+                    params,
                     service_endpoint="metrics.aliyuncs.com",
                     api_version="2019-01-01",
                 )
@@ -154,7 +175,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteMetricRules",
-                    {},
+                    params,
                     service_endpoint="metrics.aliyuncs.com",
                     api_version="2019-01-01",
                 )
