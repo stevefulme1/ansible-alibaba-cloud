@@ -99,11 +99,22 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("snat_table_id") is not None:
+        params["SnatTableId"] = module.params["snat_table_id"]
+    if module.params.get("source_vswitch_id") is not None:
+        params["SourceVswitchId"] = module.params["source_vswitch_id"]
+    if module.params.get("snat_ip") is not None:
+        params["SnatIp"] = module.params["snat_ip"]
+    if module.params.get("snat_entry_id") is not None:
+        params["SnatEntryId"] = module.params["snat_entry_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeSnatTableEntries",
-            {},
+            params,
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -120,7 +131,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateSnatEntry",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -137,7 +148,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteSnatEntry",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

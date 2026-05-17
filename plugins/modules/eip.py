@@ -89,11 +89,18 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("bandwidth") is not None:
+        params["Bandwidth"] = module.params["bandwidth"]
+    if module.params.get("allocation_id") is not None:
+        params["AllocationId"] = module.params["allocation_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeEipAddresses",
-            {},
+            params,
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -110,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AllocateEipAddress",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -127,7 +134,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "ReleaseEipAddress",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
