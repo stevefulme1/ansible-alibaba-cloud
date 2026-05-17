@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("policy_type") is not None:
+        params["PolicyType"] = module.params["policy_type"]
     try:
         result = client.get(
             "ListPolicies",

@@ -103,10 +103,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("service_name") is not None:
+        params["ServiceName"] = module.params["service_name"]
+    if module.params.get("function_name") is not None:
+        params["FunctionName"] = module.params["function_name"]
+    if module.params.get("trigger_name") is not None:
+        params["TriggerName"] = module.params["trigger_name"]
+    if module.params.get("trigger_type") is not None:
+        params["TriggerType"] = module.params["trigger_type"]
+    if module.params.get("trigger_config") is not None:
+        params["TriggerConfig"] = module.params["trigger_config"]
+
+
     try:
         existing = client.get(
             "ListTriggers",
-            {},
+            params,
             service_endpoint="fc.aliyuncs.com",
             api_version="2021-04-06",
         )
@@ -123,7 +136,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateTrigger",
-                    {},
+                    params,
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2021-04-06",
                 )
@@ -137,7 +150,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteTrigger",
-                    {},
+                    params,
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2021-04-06",
                 )

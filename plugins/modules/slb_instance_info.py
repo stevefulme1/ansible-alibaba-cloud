@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("load_balancer_name") is not None:
+        params["LoadBalancerName"] = module.params["load_balancer_name"]
     try:
         result = client.get(
             "DescribeLoadBalancers",

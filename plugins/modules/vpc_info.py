@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("vpc_name") is not None:
+        params["VpcName"] = module.params["vpc_name"]
     try:
         result = client.get(
             "DescribeVpcs",

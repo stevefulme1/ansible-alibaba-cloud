@@ -88,11 +88,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("bucket_name") is not None:
+        params["BucketName"] = module.params["bucket_name"]
+    if module.params.get("sse_algorithm") is not None:
+        params["SSEAlgorithm"] = module.params["sse_algorithm"]
+    if module.params.get("kms_master_key_id") is not None:
+        params["KMSMasterKeyID"] = module.params["kms_master_key_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetBucketEncryption",
-            {},
+            params,
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -109,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketEncryption",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -130,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketEncryption",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

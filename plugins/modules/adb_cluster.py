@@ -114,10 +114,27 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("db_cluster_id") is not None:
+        params["DBClusterId"] = module.params["db_cluster_id"]
+    if module.params.get("db_cluster_description") is not None:
+        params["DBClusterDescription"] = module.params["db_cluster_description"]
+    if module.params.get("db_cluster_category") is not None:
+        params["DBClusterCategory"] = module.params["db_cluster_category"]
+    if module.params.get("db_cluster_class") is not None:
+        params["DBClusterClass"] = module.params["db_cluster_class"]
+    if module.params.get("db_node_count") is not None:
+        params["DBNodeCount"] = module.params["db_node_count"]
+    if module.params.get("db_node_storage") is not None:
+        params["DBNodeStorage"] = module.params["db_node_storage"]
+    if module.params.get("pay_type") is not None:
+        params["PayType"] = module.params["pay_type"]
+
+
     try:
         existing = client.get(
             "DescribeDBClusters",
-            {},
+            params,
             service_endpoint="adb.aliyuncs.com",
             api_version="2019-03-15",
         )
@@ -134,7 +151,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDBCluster",
-                    {},
+                    params,
                     service_endpoint="adb.aliyuncs.com",
                     api_version="2019-03-15",
                 )
@@ -148,7 +165,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDBCluster",
-                    {},
+                    params,
                     service_endpoint="adb.aliyuncs.com",
                     api_version="2019-03-15",
                 )

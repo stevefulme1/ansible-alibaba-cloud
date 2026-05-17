@@ -89,10 +89,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("namespace_name") is not None:
+        params["NamespaceName"] = module.params["namespace_name"]
+
+
     try:
         result = client.get(
             "ListNamespace",
-            {},
+            params,
             service_endpoint="cr.aliyuncs.com",
             api_version="2018-12-01",
         )
@@ -109,7 +116,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateNamespace",
-                    {},
+                    params,
                     service_endpoint="cr.aliyuncs.com",
                     api_version="2018-12-01",
                 )
@@ -126,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteNamespace",
-                    {},
+                    params,
                     service_endpoint="cr.aliyuncs.com",
                     api_version="2018-12-01",
                 )

@@ -103,11 +103,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_name") is not None:
+        params["InstanceName"] = module.params["instance_name"]
+    if module.params.get("instance_type") is not None:
+        params["InstanceType"] = module.params["instance_type"]
+    if module.params.get("image_id") is not None:
+        params["ImageId"] = module.params["image_id"]
+    if module.params.get("vswitch_id") is not None:
+        params["VSwitchId"] = module.params["vswitch_id"]
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeInstances",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -124,7 +136,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "RunInstances",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -141,7 +153,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

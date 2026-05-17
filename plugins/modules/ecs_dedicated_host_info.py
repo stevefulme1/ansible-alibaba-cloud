@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("dedicated_host_id") is not None:
+        params["DedicatedHostId"] = module.params["dedicated_host_id"]
     try:
         result = client.get(
             "DescribeDedicatedHosts",

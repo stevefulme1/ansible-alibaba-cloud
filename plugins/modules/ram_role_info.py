@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("role_name") is not None:
+        params["RoleName"] = module.params["role_name"]
     try:
         result = client.get(
             "ListRoles",

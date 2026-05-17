@@ -89,11 +89,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("user_name") is not None:
+        params["UserName"] = module.params["user_name"]
+    if module.params.get("access_key_id_param") is not None:
+        params["UserAccessKeyId"] = module.params["access_key_id_param"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListAccessKeys",
-            {},
+            params,
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -110,7 +116,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAccessKey",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -127,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAccessKey",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )

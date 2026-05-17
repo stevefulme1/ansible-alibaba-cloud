@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("group_name") is not None:
+        params["GroupName"] = module.params["group_name"]
     try:
         result = client.get(
             "ListGroups",

@@ -77,11 +77,18 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("backup_id") is not None:
+        params["BackupId"] = module.params["backup_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeBackups",
-            {},
+            params,
             service_endpoint="r-kvstore.aliyuncs.com",
             api_version="2015-01-01",
         )
@@ -98,7 +105,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateBackup",
-                    {},
+                    params,
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )

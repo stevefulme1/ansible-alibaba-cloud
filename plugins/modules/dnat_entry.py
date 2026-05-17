@@ -114,11 +114,28 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("forward_table_id") is not None:
+        params["ForwardTableId"] = module.params["forward_table_id"]
+    if module.params.get("external_ip") is not None:
+        params["ExternalIp"] = module.params["external_ip"]
+    if module.params.get("external_port") is not None:
+        params["ExternalPort"] = module.params["external_port"]
+    if module.params.get("internal_ip") is not None:
+        params["InternalIp"] = module.params["internal_ip"]
+    if module.params.get("internal_port") is not None:
+        params["InternalPort"] = module.params["internal_port"]
+    if module.params.get("ip_protocol") is not None:
+        params["IpProtocol"] = module.params["ip_protocol"]
+    if module.params.get("forward_entry_id") is not None:
+        params["ForwardEntryId"] = module.params["forward_entry_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeForwardTableEntries",
-            {},
+            params,
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -135,7 +152,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateForwardEntry",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -152,7 +169,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteForwardEntry",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

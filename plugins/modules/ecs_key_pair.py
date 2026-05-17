@@ -89,11 +89,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("key_pair_name") is not None:
+        params["KeyPairName"] = module.params["key_pair_name"]
+    if module.params.get("public_key_body") is not None:
+        params["PublicKeyBody"] = module.params["public_key_body"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeKeyPairs",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -110,7 +116,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateKeyPair",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -127,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteKeyPairs",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

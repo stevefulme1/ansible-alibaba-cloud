@@ -95,11 +95,20 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("secret_name") is not None:
+        params["SecretName"] = module.params["secret_name"]
+    if module.params.get("secret_data") is not None:
+        params["SecretData"] = module.params["secret_data"]
+    if module.params.get("version_id") is not None:
+        params["VersionId"] = module.params["version_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListSecrets",
-            {},
+            params,
             service_endpoint="kms.aliyuncs.com",
             api_version="2016-01-20",
         )
@@ -116,7 +125,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateSecret",
-                    {},
+                    params,
                     service_endpoint="kms.aliyuncs.com",
                     api_version="2016-01-20",
                 )
@@ -133,7 +142,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteSecret",
-                    {},
+                    params,
                     service_endpoint="kms.aliyuncs.com",
                     api_version="2016-01-20",
                 )

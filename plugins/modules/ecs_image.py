@@ -93,11 +93,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("image_name") is not None:
+        params["ImageName"] = module.params["image_name"]
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("image_id") is not None:
+        params["ImageId"] = module.params["image_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeImages",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -114,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateImage",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -131,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteImage",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

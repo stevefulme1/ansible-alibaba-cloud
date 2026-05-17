@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("user_name") is not None:
+        params["UserName"] = module.params["user_name"]
     try:
         result = client.get(
             "ListUsers",

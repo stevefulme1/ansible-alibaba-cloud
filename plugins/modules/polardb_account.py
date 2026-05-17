@@ -98,10 +98,21 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("db_cluster_id") is not None:
+        params["DBClusterId"] = module.params["db_cluster_id"]
+    if module.params.get("account_name") is not None:
+        params["AccountName"] = module.params["account_name"]
+    if module.params.get("account_password") is not None:
+        params["AccountPassword"] = module.params["account_password"]
+    if module.params.get("account_type") is not None:
+        params["AccountType"] = module.params["account_type"]
+
+
     try:
         existing = client.get(
             "DescribeAccounts",
-            {},
+            params,
             service_endpoint="polardb.aliyuncs.com",
             api_version="2017-08-01",
         )
@@ -118,7 +129,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAccount",
-                    {},
+                    params,
                     service_endpoint="polardb.aliyuncs.com",
                     api_version="2017-08-01",
                 )
@@ -132,7 +143,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAccount",
-                    {},
+                    params,
                     service_endpoint="polardb.aliyuncs.com",
                     api_version="2017-08-01",
                 )

@@ -98,11 +98,22 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("description") is not None:
+        params["Description"] = module.params["description"]
+    if module.params.get("key_usage") is not None:
+        params["KeyUsage"] = module.params["key_usage"]
+    if module.params.get("key_id") is not None:
+        params["KeyId"] = module.params["key_id"]
+    if module.params.get("pending_window_in_days") is not None:
+        params["PendingWindowInDays"] = module.params["pending_window_in_days"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListKeys",
-            {},
+            params,
             service_endpoint="kms.aliyuncs.com",
             api_version="2016-01-20",
         )
@@ -119,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateKey",
-                    {},
+                    params,
                     service_endpoint="kms.aliyuncs.com",
                     api_version="2016-01-20",
                 )
@@ -136,7 +147,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "ScheduleKeyDeletion",
-                    {},
+                    params,
                     service_endpoint="kms.aliyuncs.com",
                     api_version="2016-01-20",
                 )

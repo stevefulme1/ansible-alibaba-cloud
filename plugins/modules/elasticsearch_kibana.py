@@ -89,10 +89,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("kibana_node_spec") is not None:
+        params["KibanaNodeSpec"] = module.params["kibana_node_spec"]
+
+
     try:
         result = client.get(
             "DescribeKibanaSettings",
-            {},
+            params,
             service_endpoint="elasticsearch.aliyuncs.com",
             api_version="2017-06-13",
         )
@@ -109,7 +116,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "UpdateKibanaSettings",
-                    {},
+                    params,
                     service_endpoint="elasticsearch.aliyuncs.com",
                     api_version="2017-06-13",
                 )
@@ -126,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "UpdateKibanaSettings",
-                    {},
+                    params,
                     service_endpoint="elasticsearch.aliyuncs.com",
                     api_version="2017-06-13",
                 )

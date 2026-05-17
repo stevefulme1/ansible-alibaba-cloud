@@ -112,11 +112,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("scaling_group_id") is not None:
+        params["ScalingGroupId"] = module.params["scaling_group_id"]
+    if module.params.get("scaling_rule_name") is not None:
+        params["ScalingRuleName"] = module.params["scaling_rule_name"]
+    if module.params.get("adjustment_type") is not None:
+        params["AdjustmentType"] = module.params["adjustment_type"]
+    if module.params.get("adjustment_value") is not None:
+        params["AdjustmentValue"] = module.params["adjustment_value"]
+    if module.params.get("scaling_rule_id") is not None:
+        params["ScalingRuleId"] = module.params["scaling_rule_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeScalingRules",
-            {},
+            params,
             service_endpoint="ess.aliyuncs.com",
             api_version="2014-08-28",
         )
@@ -133,7 +145,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateScalingRule",
-                    {},
+                    params,
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )
@@ -150,7 +162,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteScalingRule",
-                    {},
+                    params,
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )

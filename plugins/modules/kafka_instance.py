@@ -106,10 +106,25 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_name") is not None:
+        params["InstanceName"] = module.params["instance_name"]
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("disk_type") is not None:
+        params["DiskType"] = module.params["disk_type"]
+    if module.params.get("disk_size") is not None:
+        params["DiskSize"] = module.params["disk_size"]
+    if module.params.get("deploy_type") is not None:
+        params["DeployType"] = module.params["deploy_type"]
+    if module.params.get("io_max") is not None:
+        params["IoMax"] = module.params["io_max"]
+
+
     try:
         existing = client.get(
             "DescribeInstance",
-            {},
+            params,
             service_endpoint="alikafka.{region_id}.aliyuncs.com",
             api_version="2019-09-16",
         )
@@ -126,7 +141,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "Create",
-                    {},
+                    params,
                     service_endpoint="alikafka.{region_id}.aliyuncs.com",
                     api_version="2019-09-16",
                 )
@@ -143,7 +158,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    {},
+                    params,
                     service_endpoint="alikafka.{region_id}.aliyuncs.com",
                     api_version="2019-09-16",
                 )

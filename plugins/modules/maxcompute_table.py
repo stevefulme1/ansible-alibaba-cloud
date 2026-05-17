@@ -96,10 +96,21 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("project_name") is not None:
+        params["ProjectName"] = module.params["project_name"]
+    if module.params.get("table_name") is not None:
+        params["TableName"] = module.params["table_name"]
+    if module.params.get("columns") is not None:
+        params["Columns"] = module.params["columns"]
+    if module.params.get("comment") is not None:
+        params["Comment"] = module.params["comment"]
+
+
     try:
         existing = client.get(
             "ListTables",
-            {},
+            params,
             service_endpoint="maxcompute.aliyuncs.com",
             api_version="2022-01-04",
         )
@@ -116,7 +127,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateTable",
-                    {},
+                    params,
                     service_endpoint="maxcompute.aliyuncs.com",
                     api_version="2022-01-04",
                 )
@@ -130,7 +141,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteTable",
-                    {},
+                    params,
                     service_endpoint="maxcompute.aliyuncs.com",
                     api_version="2022-01-04",
                 )

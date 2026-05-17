@@ -85,11 +85,15 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("group_name") is not None:
+        params["GroupName"] = module.params["group_name"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListGroups",
-            {},
+            params,
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -106,7 +110,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateGroup",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -123,7 +127,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteGroup",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )

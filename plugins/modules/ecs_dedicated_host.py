@@ -93,10 +93,18 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("dedicated_host_type") is not None:
+        params["DedicatedHostType"] = module.params["dedicated_host_type"]
+    if module.params.get("dedicated_host_name") is not None:
+        params["DedicatedHostName"] = module.params["dedicated_host_name"]
+    if module.params.get("dedicated_host_id") is not None:
+        params["DedicatedHostId"] = module.params["dedicated_host_id"]
+
     try:
         result = client.get(
             "DescribeDedicatedHosts",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -113,7 +121,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AllocateDedicatedHosts",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -130,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "ReleaseDedicatedHost",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

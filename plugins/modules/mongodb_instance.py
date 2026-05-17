@@ -103,11 +103,28 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("db_instance_id") is not None:
+        params["DBInstanceId"] = module.params["db_instance_id"]
+    if module.params.get("db_instance_class") is not None:
+        params["DBInstanceClass"] = module.params["db_instance_class"]
+    if module.params.get("db_instance_storage") is not None:
+        params["DBInstanceStorage"] = module.params["db_instance_storage"]
+    if module.params.get("engine") is not None:
+        params["Engine"] = module.params["engine"]
+    if module.params.get("engine_version") is not None:
+        params["EngineVersion"] = module.params["engine_version"]
+    if module.params.get("db_instance_description") is not None:
+        params["DBInstanceDescription"] = module.params["db_instance_description"]
+    if module.params.get("account_password") is not None:
+        params["AccountPassword"] = module.params["account_password"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDBInstances",
-            {},
+            params,
             service_endpoint="mongodb.aliyuncs.com",
             api_version="2015-12-01",
         )
@@ -124,7 +141,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDBInstance",
-                    {},
+                    params,
                     service_endpoint="mongodb.aliyuncs.com",
                     api_version="2015-12-01",
                 )
@@ -145,7 +162,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDBInstance",
-                    {},
+                    params,
                     service_endpoint="mongodb.aliyuncs.com",
                     api_version="2015-12-01",
                 )

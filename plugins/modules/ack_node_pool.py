@@ -101,11 +101,26 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("cluster_id") is not None:
+        params["ClusterId"] = module.params["cluster_id"]
+    if module.params.get("nodepool_id") is not None:
+        params["NodepoolId"] = module.params["nodepool_id"]
+    if module.params.get("name") is not None:
+        params["Name"] = module.params["name"]
+    if module.params.get("instance_types") is not None:
+        params["InstanceTypes"] = module.params["instance_types"]
+    if module.params.get("desired_size") is not None:
+        params["DesiredSize"] = module.params["desired_size"]
+    if module.params.get("vswitch_ids") is not None:
+        params["VSwitchIds"] = module.params["vswitch_ids"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeClusterNodePools",
-            {},
+            params,
             service_endpoint="cs.aliyuncs.com",
             api_version="2015-12-15",
         )
@@ -122,7 +137,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateClusterNodePool",
-                    {},
+                    params,
                     service_endpoint="cs.aliyuncs.com",
                     api_version="2015-12-15",
                 )
@@ -143,7 +158,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteClusterNodepool",
-                    {},
+                    params,
                     service_endpoint="cs.aliyuncs.com",
                     api_version="2015-12-15",
                 )

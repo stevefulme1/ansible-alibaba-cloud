@@ -98,11 +98,22 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("nat_gateway_name") is not None:
+        params["NatGatewayName"] = module.params["nat_gateway_name"]
+    if module.params.get("vpc_id") is not None:
+        params["VpcId"] = module.params["vpc_id"]
+    if module.params.get("nat_type") is not None:
+        params["NatType"] = module.params["nat_type"]
+    if module.params.get("nat_gateway_id") is not None:
+        params["NatGatewayId"] = module.params["nat_gateway_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeNatGateways",
-            {},
+            params,
             service_endpoint="vpc.aliyuncs.com",
             api_version="2016-04-28",
         )
@@ -119,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateNatGateway",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )
@@ -136,7 +147,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteNatGateway",
-                    {},
+                    params,
                     service_endpoint="vpc.aliyuncs.com",
                     api_version="2016-04-28",
                 )

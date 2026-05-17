@@ -64,6 +64,8 @@ scaling_group:
   type: dict
 """
 
+import json
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
@@ -103,11 +105,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("scaling_group_name") is not None:
+        params["ScalingGroupName"] = module.params["scaling_group_name"]
+    if module.params.get("max_size") is not None:
+        params["MaxSize"] = module.params["max_size"]
+    if module.params.get("min_size") is not None:
+        params["MinSize"] = module.params["min_size"]
+    if module.params.get("vswitch_ids") is not None:
+        params["VSwitchIds"] = json.dumps(module.params["vswitch_ids"])
+    if module.params.get("scaling_group_id") is not None:
+        params["ScalingGroupId"] = module.params["scaling_group_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeScalingGroups",
-            {},
+            params,
             service_endpoint="ess.aliyuncs.com",
             api_version="2014-08-28",
         )
@@ -124,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateScalingGroup",
-                    {},
+                    params,
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )
@@ -141,7 +155,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteScalingGroup",
-                    {},
+                    params,
                     service_endpoint="ess.aliyuncs.com",
                     api_version="2014-08-28",
                 )

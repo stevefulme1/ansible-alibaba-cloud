@@ -49,6 +49,8 @@ rds_parameter:
   type: dict
 """
 
+import json
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
@@ -81,11 +83,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("db_instance_id") is not None:
+        params["DBInstanceId"] = module.params["db_instance_id"]
+    if module.params.get("parameter_group_id") is not None:
+        params["ParameterGroupId"] = module.params["parameter_group_id"]
+    if module.params.get("parameters") is not None:
+        params["Parameters"] = json.dumps(module.params["parameters"])
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeParameterGroup",
-            {},
+            params,
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -102,7 +112,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "ModifyParameterGroup",
-                    {},
+                    params,
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

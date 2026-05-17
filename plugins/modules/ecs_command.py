@@ -97,10 +97,20 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("command_name") is not None:
+        params["CommandName"] = module.params["command_name"]
+    if module.params.get("command_type") is not None:
+        params["CommandType"] = module.params["command_type"]
+    if module.params.get("command_content") is not None:
+        params["CommandContent"] = module.params["command_content"]
+    if module.params.get("command_id") is not None:
+        params["CommandId"] = module.params["command_id"]
+
     try:
         result = client.get(
             "DescribeCommands",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -117,7 +127,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateCommand",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -134,7 +144,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteCommand",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

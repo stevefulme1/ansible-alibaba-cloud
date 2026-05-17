@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("prefix") is not None:
+        params["Prefix"] = module.params["prefix"]
     try:
         result = client.get(
             "ListBuckets",

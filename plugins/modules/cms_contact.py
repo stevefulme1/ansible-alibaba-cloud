@@ -91,11 +91,22 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("contact_name") is not None:
+        params["ContactName"] = module.params["contact_name"]
+    if module.params.get("describe") is not None:
+        params["Describe"] = module.params["describe"]
+    if module.params.get("channels_mail") is not None:
+        params["ChannelsMail"] = module.params["channels_mail"]
+    if module.params.get("channels_sms") is not None:
+        params["ChannelsSms"] = module.params["channels_sms"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeContactList",
-            {},
+            params,
             service_endpoint="metrics.aliyuncs.com",
             api_version="2019-01-01",
         )
@@ -112,7 +123,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutContact",
-                    {},
+                    params,
                     service_endpoint="metrics.aliyuncs.com",
                     api_version="2019-01-01",
                 )
@@ -133,7 +144,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteContact",
-                    {},
+                    params,
                     service_endpoint="metrics.aliyuncs.com",
                     api_version="2019-01-01",
                 )

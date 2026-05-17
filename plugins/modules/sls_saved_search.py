@@ -97,10 +97,21 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("project_name") is not None:
+        params["ProjectName"] = module.params["project_name"]
+    if module.params.get("search_name") is not None:
+        params["SearchName"] = module.params["search_name"]
+    if module.params.get("search_query") is not None:
+        params["SearchQuery"] = module.params["search_query"]
+    if module.params.get("logstore") is not None:
+        params["Logstore"] = module.params["logstore"]
+
+
     try:
         result = client.get(
             "ListSavedSearch",
-            {},
+            params,
             service_endpoint="sls.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -117,7 +128,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateSavedSearch",
-                    {},
+                    params,
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -134,7 +145,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteSavedSearch",
-                    {},
+                    params,
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )

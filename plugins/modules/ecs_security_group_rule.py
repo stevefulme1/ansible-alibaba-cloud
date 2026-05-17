@@ -106,11 +106,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("security_group_id") is not None:
+        params["SecurityGroupId"] = module.params["security_group_id"]
+    if module.params.get("ip_protocol") is not None:
+        params["IpProtocol"] = module.params["ip_protocol"]
+    if module.params.get("port_range") is not None:
+        params["PortRange"] = module.params["port_range"]
+    if module.params.get("source_cidr_ip") is not None:
+        params["SourceCidrIp"] = module.params["source_cidr_ip"]
+    if module.params.get("direction") is not None:
+        params["Direction"] = module.params["direction"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeSecurityGroupAttribute",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -127,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AuthorizeSecurityGroup",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -144,7 +156,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "RevokeSecurityGroup",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
