@@ -101,7 +101,6 @@ def main():
     if module.params.get("smart_ag_id") is not None:
         params["SmartAgId"] = module.params["smart_ag_id"]
 
-
     try:
         result = client.get(
             "DescribeSmartAccessGateways",

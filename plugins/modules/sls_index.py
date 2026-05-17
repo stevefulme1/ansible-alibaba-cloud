@@ -108,7 +108,6 @@ def main():
     if module.params.get("keys") is not None:
         params["Keys"] = module.params["keys"]
 
-
     try:
         existing = client.get(
             "DescribeIndex",

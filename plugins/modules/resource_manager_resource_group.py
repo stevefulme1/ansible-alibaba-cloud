@@ -102,7 +102,6 @@ def main():
     if module.params.get("resource_group_id") is not None:
         params["ResourceGroupId"] = module.params["resource_group_id"]
 
-
     try:
         existing = client.get(
             "DescribeResourceGroup",

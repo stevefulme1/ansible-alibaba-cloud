@@ -95,7 +95,6 @@ def main():
     if module.params.get("protocol") is not None:
         params["Protocol"] = module.params["protocol"]
 
-
     try:
         result = client.get(
             "ListCustomDomains",

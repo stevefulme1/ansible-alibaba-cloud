@@ -115,7 +115,6 @@ def main():
     if module.params.get("trigger_config") is not None:
         params["TriggerConfig"] = module.params["trigger_config"]
 
-
     try:
         existing = client.get(
             "ListTriggers",

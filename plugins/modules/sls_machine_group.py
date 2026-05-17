@@ -101,7 +101,6 @@ def main():
     if module.params.get("machine_list") is not None:
         params["MachineList"] = module.params["machine_list"]
 
-
     try:
         result = client.get(
             "ListMachineGroup",

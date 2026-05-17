@@ -89,7 +89,6 @@ def main():
     if module.params.get("plan") is not None:
         params["Plan"] = module.params["plan"]
 
-
     try:
         existing = client.get(
             "DescribeInstances",

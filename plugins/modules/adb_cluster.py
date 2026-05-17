@@ -130,7 +130,6 @@ def main():
     if module.params.get("pay_type") is not None:
         params["PayType"] = module.params["pay_type"]
 
-
     try:
         existing = client.get(
             "DescribeDBClusters",

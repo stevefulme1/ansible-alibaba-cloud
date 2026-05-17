@@ -103,7 +103,6 @@ def main():
     if module.params.get("version_id") is not None:
         params["VersionId"] = module.params["version_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

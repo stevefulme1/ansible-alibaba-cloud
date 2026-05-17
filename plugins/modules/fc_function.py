@@ -119,7 +119,6 @@ def main():
     if module.params.get("memory_size") is not None:
         params["MemorySize"] = module.params["memory_size"]
 
-
     try:
         existing = client.get(
             "ListFunctions",

@@ -108,7 +108,6 @@ def main():
     if module.params.get("description") is not None:
         params["Description"] = module.params["description"]
 
-
     try:
         existing = client.get(
             "DescribeDashboard",

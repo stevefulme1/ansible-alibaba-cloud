@@ -107,7 +107,6 @@ def main():
     if module.params.get("repo_type") is not None:
         params["RepoType"] = module.params["repo_type"]
 
-
     try:
         result = client.get(
             "ListRepository",

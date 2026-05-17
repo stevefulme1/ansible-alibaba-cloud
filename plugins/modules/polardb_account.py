@@ -108,7 +108,6 @@ def main():
     if module.params.get("account_type") is not None:
         params["AccountType"] = module.params["account_type"]
 
-
     try:
         existing = client.get(
             "DescribeAccounts",

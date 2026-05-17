@@ -108,7 +108,6 @@ def main():
     if module.params.get("trail_region") is not None:
         params["TrailRegion"] = module.params["trail_region"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

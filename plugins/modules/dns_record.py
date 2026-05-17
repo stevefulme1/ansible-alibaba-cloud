@@ -116,7 +116,6 @@ def main():
     if module.params.get("record_id") is not None:
         params["RecordId"] = module.params["record_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

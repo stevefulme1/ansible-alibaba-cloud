@@ -108,7 +108,6 @@ def main():
     if module.params.get("network_mode") is not None:
         params["NetworkMode"] = module.params["network_mode"]
 
-
     try:
         existing = client.get(
             "DescribeCluster",

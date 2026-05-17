@@ -97,7 +97,6 @@ def main():
     if module.params.get("primary_keys") is not None:
         params["PrimaryKeys"] = module.params["primary_keys"]
 
-
     try:
         existing = client.get(
             "ListTable",

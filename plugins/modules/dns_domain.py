@@ -89,7 +89,6 @@ def main():
     if module.params.get("domain_name") is not None:
         params["DomainName"] = module.params["domain_name"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

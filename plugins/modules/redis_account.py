@@ -102,7 +102,6 @@ def main():
     if module.params.get("account_privilege") is not None:
         params["AccountPrivilege"] = module.params["account_privilege"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

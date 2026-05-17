@@ -120,7 +120,6 @@ def main():
     if module.params.get("io_max") is not None:
         params["IoMax"] = module.params["io_max"]
 
-
     try:
         existing = client.get(
             "DescribeInstance",

@@ -97,7 +97,6 @@ def main():
     if module.params.get("group_id") is not None:
         params["GroupId"] = module.params["group_id"]
 
-
     try:
         existing = client.get(
             "DescribeApiGroups",

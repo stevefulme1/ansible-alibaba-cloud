@@ -101,7 +101,6 @@ def main():
     if module.params.get("shard_count") is not None:
         params["ShardCount"] = module.params["shard_count"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

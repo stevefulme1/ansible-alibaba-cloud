@@ -90,7 +90,6 @@ def main():
     if module.params.get("function_args") is not None:
         params["FunctionArgs"] = module.params["function_args"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

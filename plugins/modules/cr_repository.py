@@ -108,7 +108,6 @@ def main():
     if module.params.get("summary") is not None:
         params["Summary"] = module.params["summary"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

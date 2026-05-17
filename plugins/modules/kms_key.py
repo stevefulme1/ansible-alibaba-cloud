@@ -108,7 +108,6 @@ def main():
     if module.params.get("pending_window_in_days") is not None:
         params["PendingWindowInDays"] = module.params["pending_window_in_days"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

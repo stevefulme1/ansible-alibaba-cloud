@@ -101,7 +101,6 @@ def main():
     if module.params.get("certificate_key") is not None:
         params["CertificateKey"] = module.params["certificate_key"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

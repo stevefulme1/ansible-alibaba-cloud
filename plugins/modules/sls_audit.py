@@ -94,7 +94,6 @@ def main():
     if module.params.get("aliuid") is not None:
         params["Aliuid"] = module.params["aliuid"]
 
-
     try:
         result = client.get(
             "DescribeAudit",

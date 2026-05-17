@@ -90,7 +90,6 @@ def main():
     if module.params.get("cluster_type") is not None:
         params["ClusterType"] = module.params["cluster_type"]
 
-
     try:
         existing = client.get(
             "ListInstance",

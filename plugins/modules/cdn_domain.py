@@ -103,7 +103,6 @@ def main():
     if module.params.get("source_type") is not None:
         params["SourceType"] = module.params["source_type"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

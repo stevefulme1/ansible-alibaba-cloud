@@ -119,7 +119,6 @@ def main():
     if module.params.get("data_node_disk_size") is not None:
         params["DataNodeDiskSize"] = module.params["data_node_disk_size"]
 
-
     try:
         result = client.get(
             "ListInstance",

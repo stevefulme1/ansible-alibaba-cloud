@@ -106,7 +106,6 @@ def main():
     if module.params.get("comment") is not None:
         params["Comment"] = module.params["comment"]
 
-
     try:
         existing = client.get(
             "ListTables",

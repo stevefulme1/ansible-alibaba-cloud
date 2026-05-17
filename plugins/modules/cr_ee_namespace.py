@@ -95,7 +95,6 @@ def main():
     if module.params.get("namespace_name") is not None:
         params["NamespaceName"] = module.params["namespace_name"]
 
-
     try:
         result = client.get(
             "ListNamespace",

@@ -108,7 +108,6 @@ def main():
     if module.params.get("payer_account_id") is not None:
         params["PayerAccountId"] = module.params["payer_account_id"]
 
-
     try:
         existing = client.get(
             "DescribeResourceAccount",

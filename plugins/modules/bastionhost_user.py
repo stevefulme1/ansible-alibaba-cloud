@@ -97,7 +97,6 @@ def main():
     if module.params.get("source") is not None:
         params["Source"] = module.params["source"]
 
-
     try:
         existing = client.get(
             "ListUsers",

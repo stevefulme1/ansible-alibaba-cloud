@@ -96,7 +96,6 @@ def main():
     if module.params.get("contact_names") is not None:
         params["ContactNames"] = module.params["contact_names"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

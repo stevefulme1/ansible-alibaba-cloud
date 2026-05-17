@@ -102,7 +102,6 @@ def main():
     if module.params.get("parent_folder_id") is not None:
         params["ParentFolderId"] = module.params["parent_folder_id"]
 
-
     try:
         existing = client.get(
             "DescribeFolder",

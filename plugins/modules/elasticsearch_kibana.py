@@ -95,7 +95,6 @@ def main():
     if module.params.get("kibana_node_spec") is not None:
         params["KibanaNodeSpec"] = module.params["kibana_node_spec"]
 
-
     try:
         result = client.get(
             "DescribeKibanaSettings",

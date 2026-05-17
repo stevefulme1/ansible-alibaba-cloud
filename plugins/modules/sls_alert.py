@@ -120,7 +120,6 @@ def main():
     if module.params.get("dashboard") is not None:
         params["Dashboard"] = module.params["dashboard"]
 
-
     try:
         existing = client.get(
             "DescribeAlert",

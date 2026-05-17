@@ -101,7 +101,6 @@ def main():
     if module.params.get("instance_id") is not None:
         params["InstanceId"] = module.params["instance_id"]
 
-
     try:
         result = client.get(
             "ListInstance",

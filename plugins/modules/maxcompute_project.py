@@ -97,7 +97,6 @@ def main():
     if module.params.get("default_quota") is not None:
         params["DefaultQuota"] = module.params["default_quota"]
 
-
     try:
         existing = client.get(
             "ListProjects",

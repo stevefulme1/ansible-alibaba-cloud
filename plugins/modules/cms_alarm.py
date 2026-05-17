@@ -132,7 +132,6 @@ def main():
     if module.params.get("contact_groups") is not None:
         params["ContactGroups"] = module.params["contact_groups"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

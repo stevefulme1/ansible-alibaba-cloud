@@ -109,7 +109,6 @@ def main():
     if module.params.get("snat_entry_id") is not None:
         params["SnatEntryId"] = module.params["snat_entry_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

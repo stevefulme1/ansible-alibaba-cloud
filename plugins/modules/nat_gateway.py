@@ -108,7 +108,6 @@ def main():
     if module.params.get("nat_gateway_id") is not None:
         params["NatGatewayId"] = module.params["nat_gateway_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

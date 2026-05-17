@@ -95,7 +95,6 @@ def main():
     if module.params.get("allocation_id") is not None:
         params["AllocationId"] = module.params["allocation_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

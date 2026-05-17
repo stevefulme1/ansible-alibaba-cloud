@@ -120,7 +120,6 @@ def main():
     if module.params.get("service_config") is not None:
         params["ServiceConfig"] = module.params["service_config"]
 
-
     try:
         existing = client.get(
             "DescribeApis",

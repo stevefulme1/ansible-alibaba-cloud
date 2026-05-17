@@ -106,7 +106,6 @@ def main():
     if module.params.get("db_description") is not None:
         params["DBDescription"] = module.params["db_description"]
 
-
     try:
         existing = client.get(
             "DescribeDatabases",

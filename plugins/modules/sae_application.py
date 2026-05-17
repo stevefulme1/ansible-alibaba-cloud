@@ -126,7 +126,6 @@ def main():
     if module.params.get("memory") is not None:
         params["Memory"] = module.params["memory"]
 
-
     try:
         existing = client.get(
             "DescribeApplication",

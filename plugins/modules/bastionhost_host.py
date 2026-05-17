@@ -103,7 +103,6 @@ def main():
     if module.params.get("os_type") is not None:
         params["OsType"] = module.params["os_type"]
 
-
     try:
         existing = client.get(
             "ListHosts",

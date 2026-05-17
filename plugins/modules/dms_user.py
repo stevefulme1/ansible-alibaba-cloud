@@ -103,7 +103,6 @@ def main():
     if module.params.get("role_names") is not None:
         params["RoleNames"] = module.params["role_names"]
 
-
     try:
         existing = client.get(
             "DescribeUser",

@@ -122,7 +122,6 @@ def main():
     if module.params.get("cluster_description") is not None:
         params["ClusterDescription"] = module.params["cluster_description"]
 
-
     try:
         existing = client.get(
             "DescribeDBClusters",

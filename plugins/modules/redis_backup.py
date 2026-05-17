@@ -83,7 +83,6 @@ def main():
     if module.params.get("backup_id") is not None:
         params["BackupId"] = module.params["backup_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

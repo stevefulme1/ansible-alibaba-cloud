@@ -84,7 +84,6 @@ def main():
     if module.params.get("backup_method") is not None:
         params["BackupMethod"] = module.params["backup_method"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

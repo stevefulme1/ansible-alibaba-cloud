@@ -102,7 +102,6 @@ def main():
     if module.params.get("namespace_description") is not None:
         params["NamespaceDescription"] = module.params["namespace_description"]
 
-
     try:
         existing = client.get(
             "DescribeNamespace",

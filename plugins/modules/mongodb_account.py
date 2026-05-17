@@ -89,7 +89,6 @@ def main():
     if module.params.get("account_password") is not None:
         params["AccountPassword"] = module.params["account_password"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

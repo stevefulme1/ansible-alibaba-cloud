@@ -103,7 +103,6 @@ def main():
     if module.params.get("log_config") is not None:
         params["LogConfig"] = module.params["log_config"]
 
-
     try:
         existing = client.get(
             "ListServices",

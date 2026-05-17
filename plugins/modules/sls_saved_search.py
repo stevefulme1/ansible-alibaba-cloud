@@ -107,7 +107,6 @@ def main():
     if module.params.get("logstore") is not None:
         params["Logstore"] = module.params["logstore"]
 
-
     try:
         result = client.get(
             "ListSavedSearch",

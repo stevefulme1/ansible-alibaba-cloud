@@ -114,7 +114,6 @@ def main():
     if module.params.get("compact_topic") is not None:
         params["CompactTopic"] = module.params["compact_topic"]
 
-
     try:
         existing = client.get(
             "DescribeTopic",

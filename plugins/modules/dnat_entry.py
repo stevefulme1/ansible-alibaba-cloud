@@ -130,7 +130,6 @@ def main():
     if module.params.get("forward_entry_id") is not None:
         params["ForwardEntryId"] = module.params["forward_entry_id"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

@@ -101,7 +101,6 @@ def main():
     if module.params.get("security_ips") is not None:
         params["SecurityIps"] = module.params["security_ips"]
 
-
     try:
         result = client.get(
             "DescribeSecurityIps",

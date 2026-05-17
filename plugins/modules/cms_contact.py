@@ -101,7 +101,6 @@ def main():
     if module.params.get("channels_sms") is not None:
         params["ChannelsSms"] = module.params["channels_sms"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

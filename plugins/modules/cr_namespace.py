@@ -102,7 +102,6 @@ def main():
     if module.params.get("default_repo_type") is not None:
         params["DefaultRepoType"] = module.params["default_repo_type"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(

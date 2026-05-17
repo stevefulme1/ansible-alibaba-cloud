@@ -115,7 +115,6 @@ def main():
     if module.params.get("vswitch_ids") is not None:
         params["VSwitchIds"] = module.params["vswitch_ids"]
 
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
