@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("launch_template_id") is not None:
+        params["LaunchTemplateId"] = module.params["launch_template_id"]
     try:
         result = client.get(
             "DescribeLaunchTemplates",

@@ -43,6 +43,8 @@ instances:
   elements: dict
 """
 
+import json
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
@@ -71,6 +73,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("instance_ids") is not None:
+        params["InstanceIds"] = json.dumps(module.params["instance_ids"])
     try:
         result = client.get(
             "DescribeInstances",

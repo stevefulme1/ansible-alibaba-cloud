@@ -93,11 +93,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("security_group_name") is not None:
+        params["SecurityGroupName"] = module.params["security_group_name"]
+    if module.params.get("vpc_id") is not None:
+        params["VpcId"] = module.params["vpc_id"]
+    if module.params.get("security_group_id") is not None:
+        params["SecurityGroupId"] = module.params["security_group_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeSecurityGroups",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -114,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateSecurityGroup",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -131,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteSecurityGroup",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

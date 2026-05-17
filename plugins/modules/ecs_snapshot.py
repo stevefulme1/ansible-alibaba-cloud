@@ -93,11 +93,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("snapshot_name") is not None:
+        params["SnapshotName"] = module.params["snapshot_name"]
+    if module.params.get("disk_id") is not None:
+        params["DiskId"] = module.params["disk_id"]
+    if module.params.get("snapshot_id") is not None:
+        params["SnapshotId"] = module.params["snapshot_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeSnapshots",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -114,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateSnapshot",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -131,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteSnapshot",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

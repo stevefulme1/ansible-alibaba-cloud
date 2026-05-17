@@ -103,11 +103,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("disk_name") is not None:
+        params["DiskName"] = module.params["disk_name"]
+    if module.params.get("disk_category") is not None:
+        params["DiskCategory"] = module.params["disk_category"]
+    if module.params.get("size") is not None:
+        params["Size"] = module.params["size"]
+    if module.params.get("zone_id") is not None:
+        params["ZoneId"] = module.params["zone_id"]
+    if module.params.get("disk_id") is not None:
+        params["DiskId"] = module.params["disk_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDisks",
-            {},
+            params,
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -124,7 +136,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDisk",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -141,7 +153,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDisk",
-                    {},
+                    params,
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("image_name") is not None:
+        params["ImageName"] = module.params["image_name"]
     try:
         result = client.get(
             "DescribeImages",

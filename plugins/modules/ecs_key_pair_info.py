@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("key_pair_name") is not None:
+        params["KeyPairName"] = module.params["key_pair_name"]
     try:
         result = client.get(
             "DescribeKeyPairs",

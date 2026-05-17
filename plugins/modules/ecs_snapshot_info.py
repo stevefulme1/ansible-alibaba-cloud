@@ -70,6 +70,8 @@ def main():
     )
 
     params = {}
+    if module.params.get("disk_id") is not None:
+        params["DiskId"] = module.params["disk_id"]
     try:
         result = client.get(
             "DescribeSnapshots",
