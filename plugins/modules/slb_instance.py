@@ -105,11 +105,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("load_balancer_name") is not None:
+        params["LoadBalancerName"] = module.params["load_balancer_name"]
+    if module.params.get("address_type") is not None:
+        params["AddressType"] = module.params["address_type"]
+    if module.params.get("vpc_id") is not None:
+        params["VpcId"] = module.params["vpc_id"]
+    if module.params.get("vswitch_id") is not None:
+        params["VSwitchId"] = module.params["vswitch_id"]
+    if module.params.get("load_balancer_id") is not None:
+        params["LoadBalancerId"] = module.params["load_balancer_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeLoadBalancers",
-            {},
+            params,
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )
@@ -126,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateLoadBalancer",
-                    {},
+                    params,
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
@@ -143,7 +155,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteLoadBalancer",
-                    {},
+                    params,
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )

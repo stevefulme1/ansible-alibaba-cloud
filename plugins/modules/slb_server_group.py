@@ -61,6 +61,8 @@ server_group:
   type: dict
 """
 
+import json
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
@@ -99,11 +101,21 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("load_balancer_id") is not None:
+        params["LoadBalancerId"] = module.params["load_balancer_id"]
+    if module.params.get("vserver_group_name") is not None:
+        params["VserverGroupName"] = module.params["vserver_group_name"]
+    if module.params.get("backend_servers") is not None:
+        params["BackendServers"] = json.dumps(module.params["backend_servers"])
+    if module.params.get("vserver_group_id") is not None:
+        params["VserverGroupId"] = module.params["vserver_group_id"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeVServerGroups",
-            {},
+            params,
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )
@@ -120,7 +132,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateVServerGroup",
-                    {},
+                    params,
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
@@ -137,7 +149,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteVServerGroup",
-                    {},
+                    params,
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )

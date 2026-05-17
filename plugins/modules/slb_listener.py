@@ -109,11 +109,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("load_balancer_id") is not None:
+        params["LoadBalancerId"] = module.params["load_balancer_id"]
+    if module.params.get("listener_port") is not None:
+        params["ListenerPort"] = module.params["listener_port"]
+    if module.params.get("backend_server_port") is not None:
+        params["BackendServerPort"] = module.params["backend_server_port"]
+    if module.params.get("bandwidth") is not None:
+        params["Bandwidth"] = module.params["bandwidth"]
+    if module.params.get("protocol") is not None:
+        params["Protocol"] = module.params["protocol"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeLoadBalancerListeners",
-            {},
+            params,
             service_endpoint="slb.aliyuncs.com",
             api_version="2014-05-15",
         )
@@ -130,7 +142,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateLoadBalancerTCPListener",
-                    {},
+                    params,
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
@@ -147,7 +159,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteLoadBalancerListener",
-                    {},
+                    params,
                     service_endpoint="slb.aliyuncs.com",
                     api_version="2014-05-15",
                 )
