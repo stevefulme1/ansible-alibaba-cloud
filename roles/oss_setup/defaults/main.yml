@@ -1,0 +1,41 @@
+---
+# Required
+# oss_bucket_name: ""
+
+oss_region: "cn-hangzhou"
+oss_state: present
+
+# Bucket settings
+oss_acl: "private"
+oss_storage_class: "Standard"
+
+# Versioning
+oss_versioning: false
+
+# Encryption
+oss_encryption_enabled: false
+oss_encryption_algorithm: "AES256"
+
+# Logging
+oss_logging_enabled: false
+oss_logging_target_bucket: ""
+oss_logging_prefix: "logs/"
+
+# Lifecycle rules
+oss_lifecycle_rules: []
+#   - name: archive-old
+#     prefix: "logs/"
+#     status: Enabled
+#     expiration_days: 365
+#     transition_days: 90
+#     transition_storage_class: "IA"
+
+# CORS rules
+oss_cors_rules: []
+#   - allowed_origins: ["https://example.com"]
+#     allowed_methods: ["GET", "PUT"]
+#     allowed_headers: ["*"]
+#     max_age_seconds: 3600
+
+# Tags
+oss_tags: {}

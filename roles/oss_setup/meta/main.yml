@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  role_name: oss_setup
+  author: Red Hat Ansible
+  description: Create and configure Alibaba Cloud OSS buckets with lifecycle and CORS
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.14"
+  platforms:
+    - name: EL
+      versions: [8, 9]
+  galaxy_tags: [alibaba, cloud, oss, storage, s3]
+dependencies: []

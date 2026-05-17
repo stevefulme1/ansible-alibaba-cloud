@@ -1,0 +1,83 @@
+---
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - rds_instance_name is defined and rds_instance_name | length > 0
+      - rds_engine is defined and rds_engine in ['MySQL', 'SQLServer', 'PostgreSQL', 'MariaDB']
+      - rds_engine_version is defined
+      - rds_instance_class is defined
+      - rds_storage is defined
+      - rds_vswitch_id is defined
+    fail_msg: "Required: rds_instance_name, rds_engine, rds_engine_version, rds_instance_class, rds_storage, rds_vswitch_id"
+
+- name: Deploy RDS instance
+  block:
+    - name: Create RDS instance
+      alibaba.alicloud.ali_rds_instance:
+        db_instance_description: "{{ rds_instance_name }}"
+        engine: "{{ rds_engine }}"
+        engine_version: "{{ rds_engine_version }}"
+        db_instance_class: "{{ rds_instance_class }}"
+        db_instance_storage: "{{ rds_storage }}"
+        db_instance_storage_type: "{{ rds_storage_type }}"
+        instance_charge_type: "{{ rds_instance_charge_type }}"
+        vswitch_id: "{{ rds_vswitch_id }}"
+        security_ips: "{{ rds_security_ips | join(',') }}"
+        connection_mode: "{{ rds_connection_mode }}"
+        region: "{{ rds_region }}"
+        state: "{{ rds_state }}"
+        tags: "{{ rds_tags }}"
+      register: _rds_instance
+
+    - name: Configure backup policy
+      alibaba.alicloud.ali_rds_backup:
+        db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
+        preferred_backup_time: "{{ rds_backup_time }}"
+        preferred_backup_period: "{{ rds_backup_period | join(',') }}"
+        backup_retention_period: "{{ rds_backup_retention }}"
+        log_backup_retention_period: "{{ rds_log_backup_retention }}"
+        region: "{{ rds_region }}"
+      when: rds_backup_enabled
+
+    - name: Create databases
+      alibaba.alicloud.ali_rds_database:
+        db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
+        db_name: "{{ item.name }}"
+        character_set_name: "{{ item.character_set | default('utf8mb4') }}"
+        db_description: "{{ item.description | default('') }}"
+        region: "{{ rds_region }}"
+        state: present
+      loop: "{{ rds_databases }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: rds_databases | length > 0
+
+    - name: Create database accounts
+      alibaba.alicloud.ali_rds_account:
+        db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
+        account_name: "{{ item.name }}"
+        account_password: "{{ item.password }}"
+        account_type: "{{ item.type | default('Normal') }}"
+        account_description: "{{ item.description | default('') }}"
+        region: "{{ rds_region }}"
+        state: present
+      loop: "{{ rds_accounts }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: rds_accounts | length > 0
+      no_log: true
+
+    - name: Set instance parameters
+      alibaba.alicloud.ali_rds_instance:
+        db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
+        parameters: "{{ rds_parameters }}"
+        region: "{{ rds_region }}"
+        state: present
+      when: rds_parameters | length > 0
+
+  rescue:
+    - name: Report RDS deployment failure
+      ansible.builtin.fail:
+        msg: >-
+          RDS deployment failed for '{{ rds_instance_name }}'.
+          Error: {{ ansible_failed_result.msg | default('Unknown error') }}

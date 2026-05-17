@@ -1,0 +1,48 @@
+---
+# Required
+# rds_instance_name: ""
+# rds_engine: ""
+# rds_engine_version: ""
+# rds_instance_class: ""
+# rds_storage: 20
+# rds_vswitch_id: ""
+
+rds_region: "cn-hangzhou"
+rds_state: present
+
+# Instance config
+rds_storage_type: "cloud_ssd"
+rds_instance_charge_type: "Postpaid"
+rds_security_ips:
+  - "0.0.0.0/0"
+rds_connection_mode: "Standard"
+
+# Backup
+rds_backup_enabled: true
+rds_backup_time: "02:00Z-03:00Z"
+rds_backup_period:
+  - Monday
+  - Wednesday
+  - Friday
+rds_backup_retention: 7
+rds_log_backup_retention: 7
+
+# Database
+rds_databases: []
+#   - name: mydb
+#     character_set: utf8mb4
+#     description: "Application database"
+
+# Accounts
+rds_accounts: []
+#   - name: admin
+#     password: "{{ vault_rds_password }}"
+#     type: Super
+#     description: "Admin account"
+
+# Parameters
+rds_parameters: {}
+#   max_connections: "500"
+#   innodb_buffer_pool_size: "1073741824"
+
+rds_tags: {}

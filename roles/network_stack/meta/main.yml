@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  role_name: network_stack
+  author: Red Hat Ansible
+  description: Deploy Alibaba Cloud VPC networking with vSwitch, NAT gateway, and EIP
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.14"
+  platforms:
+    - name: EL
+      versions: [8, 9]
+  galaxy_tags: [alibaba, cloud, vpc, network, nat]
+dependencies: []

@@ -1,0 +1,34 @@
+---
+# Required
+# net_vpc_name: ""
+
+# VPC
+net_vpc_cidr: "10.0.0.0/8"
+net_region: "cn-hangzhou"
+net_state: present
+
+# vSwitches
+net_vswitches:
+  - name: "public-subnet"
+    cidr: "10.0.1.0/24"
+    zone_id: "cn-hangzhou-a"
+  - name: "private-subnet"
+    cidr: "10.0.2.0/24"
+    zone_id: "cn-hangzhou-b"
+
+# NAT Gateway
+net_nat_gateway_enabled: true
+net_nat_gateway_name: "ansible-nat"
+net_nat_spec: "Small"
+
+# EIP
+net_eip_enabled: true
+net_eip_bandwidth: 10
+net_eip_internet_charge_type: "PayByTraffic"
+
+# SNAT
+net_snat_enabled: true
+net_snat_cidr: "10.0.2.0/24"
+
+# Tags
+net_tags: {}

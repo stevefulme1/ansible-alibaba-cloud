@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  role_name: rds_deploy
+  author: Red Hat Ansible
+  description: Deploy Alibaba Cloud RDS instances with backup policies and parameters
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.14"
+  platforms:
+    - name: EL
+      versions: [8, 9]
+  galaxy_tags: [alibaba, cloud, rds, database, mysql]
+dependencies: []

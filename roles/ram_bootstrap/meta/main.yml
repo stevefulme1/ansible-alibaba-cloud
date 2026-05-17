@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  role_name: ram_bootstrap
+  author: Red Hat Ansible
+  description: Bootstrap Alibaba Cloud RAM users, groups, policies, and MFA
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.14"
+  platforms:
+    - name: EL
+      versions: [8, 9]
+  galaxy_tags: [alibaba, cloud, ram, iam, security]
+dependencies: []

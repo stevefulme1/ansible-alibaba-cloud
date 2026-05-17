@@ -1,0 +1,86 @@
+---
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - ecs_instance_name is defined and ecs_instance_name | length > 0
+      - ecs_image_id is defined and ecs_image_id | length > 0
+      - ecs_instance_type is defined and ecs_instance_type | length > 0
+    fail_msg: "Required variables: ecs_instance_name, ecs_image_id, ecs_instance_type"
+
+- name: Provision ECS infrastructure
+  block:
+    - name: Create VPC
+      alibaba.alicloud.ali_vpc:
+        cidr_block: "{{ ecs_vpc_cidr }}"
+        vpc_name: "{{ ecs_vpc_name }}"
+        region: "{{ ecs_region }}"
+        state: present
+      register: _ecs_vpc
+
+    - name: Create vSwitch
+      alibaba.alicloud.ali_vswitch:
+        vpc_id: "{{ _ecs_vpc.vpc.vpc_id }}"
+        cidr_block: "{{ ecs_vswitch_cidr }}"
+        vswitch_name: "{{ ecs_vswitch_name }}"
+        zone_id: "{{ ecs_zone_id }}"
+        region: "{{ ecs_region }}"
+        state: present
+      register: _ecs_vswitch
+
+    - name: Create security group
+      alibaba.alicloud.ali_security_group:
+        group_name: "{{ ecs_security_group_name }}"
+        vpc_id: "{{ _ecs_vpc.vpc.vpc_id }}"
+        region: "{{ ecs_region }}"
+        state: present
+      register: _ecs_sg
+
+    - name: Configure security group rules
+      alibaba.alicloud.ali_security_group_rule:
+        group_id: "{{ _ecs_sg.group.group_id }}"
+        ip_protocol: "{{ item.ip_protocol }}"
+        port_range: "{{ item.port_range }}"
+        source_cidr_ip: "{{ item.source_cidr_ip | default('0.0.0.0/0') }}"
+        policy: "{{ item.policy | default('accept') }}"
+        direction: inbound
+        region: "{{ ecs_region }}"
+      loop: "{{ ecs_security_group_rules }}"
+      loop_control:
+        label: "{{ item.ip_protocol }}:{{ item.port_range }}"
+
+    - name: Launch ECS instance(s)
+      alibaba.alicloud.ali_instance:
+        instance_name: "{{ ecs_instance_name }}"
+        image_id: "{{ ecs_image_id }}"
+        instance_type: "{{ ecs_instance_type }}"
+        vswitch_id: "{{ _ecs_vswitch.vswitch.vswitch_id }}"
+        security_groups:
+          - "{{ _ecs_sg.group.group_id }}"
+        internet_max_bandwidth_out: "{{ ecs_internet_max_bandwidth_out }}"
+        system_disk_category: "{{ ecs_system_disk_category }}"
+        system_disk_size: "{{ ecs_system_disk_size }}"
+        instance_charge_type: "{{ ecs_instance_charge_type }}"
+        allocate_public_ip: "{{ ecs_allocate_public_ip }}"
+        key_name: "{{ ecs_key_pair_name | default(omit) }}"
+        password: "{{ ecs_password | default(omit) }}"
+        count: "{{ ecs_count }}"
+        instance_tags: "{{ ecs_instance_tags }}"
+        region: "{{ ecs_region }}"
+        state: "{{ ecs_state }}"
+        wait: "{{ ecs_wait }}"
+        wait_timeout: "{{ ecs_wait_timeout }}"
+      register: ecs_instances
+
+    - name: Display instance details
+      ansible.builtin.debug:
+        msg: "Instance {{ item.instance_id }} - Public IP: {{ item.public_ip_address | default('N/A') }}"
+      loop: "{{ ecs_instances.instances | default([]) }}"
+      loop_control:
+        label: "{{ item.instance_id }}"
+
+  rescue:
+    - name: Report ECS provisioning failure
+      ansible.builtin.fail:
+        msg: >-
+          ECS provisioning failed for '{{ ecs_instance_name }}'.
+          Error: {{ ansible_failed_result.msg | default('Unknown error') }}
