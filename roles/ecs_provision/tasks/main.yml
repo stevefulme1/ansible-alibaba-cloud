@@ -10,7 +10,7 @@
 - name: Provision ECS infrastructure
   block:
     - name: Create VPC
-      stevefulme1.alibaba_cloud.ali_vpc:
+      stevefulme1.alibaba_cloud.vpc:
         cidr_block: "{{ ecs_vpc_cidr }}"
         vpc_name: "{{ ecs_vpc_name }}"
         region: "{{ ecs_region }}"
@@ -18,7 +18,7 @@
       register: _ecs_vpc
 
     - name: Create vSwitch
-      stevefulme1.alibaba_cloud.ali_vswitch:
+      stevefulme1.alibaba_cloud.vswitch:
         vpc_id: "{{ _ecs_vpc.vpc.vpc_id }}"
         cidr_block: "{{ ecs_vswitch_cidr }}"
         vswitch_name: "{{ ecs_vswitch_name }}"
@@ -28,7 +28,7 @@
       register: _ecs_vswitch
 
     - name: Create security group
-      stevefulme1.alibaba_cloud.ali_security_group:
+      stevefulme1.alibaba_cloud.security_group:
         group_name: "{{ ecs_security_group_name }}"
         vpc_id: "{{ _ecs_vpc.vpc.vpc_id }}"
         region: "{{ ecs_region }}"
@@ -36,7 +36,7 @@
       register: _ecs_sg
 
     - name: Configure security group rules
-      stevefulme1.alibaba_cloud.ali_security_group_rule:
+      stevefulme1.alibaba_cloud.security_group_rule:
         group_id: "{{ _ecs_sg.group.group_id }}"
         ip_protocol: "{{ item.ip_protocol }}"
         port_range: "{{ item.port_range }}"
@@ -49,7 +49,7 @@
         label: "{{ item.ip_protocol }}:{{ item.port_range }}"
 
     - name: Launch ECS instance(s)
-      stevefulme1.alibaba_cloud.ali_instance:
+      stevefulme1.alibaba_cloud.instance:
         instance_name: "{{ ecs_instance_name }}"
         image_id: "{{ ecs_image_id }}"
         instance_type: "{{ ecs_instance_type }}"

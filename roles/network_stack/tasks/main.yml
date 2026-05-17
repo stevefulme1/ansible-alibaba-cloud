@@ -8,7 +8,7 @@
 - name: Deploy network stack
   block:
     - name: Create VPC
-      stevefulme1.alibaba_cloud.ali_vpc:
+      stevefulme1.alibaba_cloud.vpc:
         cidr_block: "{{ net_vpc_cidr }}"
         vpc_name: "{{ net_vpc_name }}"
         region: "{{ net_region }}"
@@ -16,7 +16,7 @@
       register: _net_vpc
 
     - name: Create vSwitches
-      stevefulme1.alibaba_cloud.ali_vswitch:
+      stevefulme1.alibaba_cloud.vswitch:
         vpc_id: "{{ _net_vpc.vpc.vpc_id }}"
         cidr_block: "{{ item.cidr }}"
         vswitch_name: "{{ item.name }}"
@@ -29,7 +29,7 @@
       register: _net_vswitches
 
     - name: Create NAT gateway
-      stevefulme1.alibaba_cloud.ali_nat_gateway:
+      stevefulme1.alibaba_cloud.nat_gateway:
         vpc_id: "{{ _net_vpc.vpc.vpc_id }}"
         nat_gateway_name: "{{ net_nat_gateway_name }}"
         spec: "{{ net_nat_spec }}"
@@ -39,7 +39,7 @@
       when: net_nat_gateway_enabled
 
     - name: Allocate EIP
-      stevefulme1.alibaba_cloud.ali_eip:
+      stevefulme1.alibaba_cloud.eip:
         bandwidth: "{{ net_eip_bandwidth }}"
         internet_charge_type: "{{ net_eip_internet_charge_type }}"
         region: "{{ net_region }}"
@@ -48,7 +48,7 @@
       when: net_eip_enabled
 
     - name: Bind EIP to NAT gateway
-      stevefulme1.alibaba_cloud.ali_eip:
+      stevefulme1.alibaba_cloud.eip:
         allocation_id: "{{ _net_eip.eip.allocation_id }}"
         instance_id: "{{ _net_nat.nat_gateway.nat_gateway_id }}"
         instance_type: Nat
@@ -61,7 +61,7 @@
         - _net_nat.nat_gateway is defined
 
     - name: Configure SNAT entry
-      stevefulme1.alibaba_cloud.ali_snat_entry:
+      stevefulme1.alibaba_cloud.snat_entry:
         snat_table_id: "{{ _net_nat.nat_gateway.snat_table_ids[0] }}"
         source_cidr: "{{ net_snat_cidr }}"
         snat_ip: "{{ _net_eip.eip.ip_address }}"

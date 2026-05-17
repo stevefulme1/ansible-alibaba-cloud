@@ -2,7 +2,7 @@
 - name: Bootstrap RAM identity
   block:
     - name: Configure password policy
-      stevefulme1.alibaba_cloud.ali_ram_policy:
+      stevefulme1.alibaba_cloud.ram_policy:
         minimum_password_length: "{{ ram_password_min_length }}"
         require_lowercase_characters: "{{ ram_password_require_lowercase }}"
         require_uppercase_characters: "{{ ram_password_require_uppercase }}"
@@ -14,7 +14,7 @@
       when: ram_password_policy_enabled
 
     - name: Create custom policies
-      stevefulme1.alibaba_cloud.ali_ram_policy:
+      stevefulme1.alibaba_cloud.ram_policy:
         policy_name: "{{ item.name }}"
         policy_document: "{{ item.document | to_json }}"
         policy_type: Custom
@@ -26,7 +26,7 @@
       when: ram_custom_policies | length > 0
 
     - name: Create RAM groups
-      stevefulme1.alibaba_cloud.ali_ram_group:
+      stevefulme1.alibaba_cloud.ram_group:
         group_name: "{{ item.name }}"
         region: "{{ ram_region }}"
         state: "{{ ram_state }}"
@@ -36,7 +36,7 @@
       when: ram_groups | length > 0
 
     - name: Attach policies to groups
-      stevefulme1.alibaba_cloud.ali_ram_group:
+      stevefulme1.alibaba_cloud.ram_group:
         group_name: "{{ item.0.name }}"
         policies:
           - "{{ item.1 }}"
@@ -48,7 +48,7 @@
       when: ram_groups | length > 0
 
     - name: Create RAM users
-      stevefulme1.alibaba_cloud.ali_ram_user:
+      stevefulme1.alibaba_cloud.ram_user:
         user_name: "{{ item.name }}"
         display_name: "{{ item.display_name | default(item.name) }}"
         region: "{{ ram_region }}"
@@ -59,7 +59,7 @@
       when: ram_users | length > 0
 
     - name: Add users to groups
-      stevefulme1.alibaba_cloud.ali_ram_group:
+      stevefulme1.alibaba_cloud.ram_group:
         group_name: "{{ item.1 }}"
         users:
           - "{{ item.0.name }}"
@@ -71,7 +71,7 @@
       when: ram_users | length > 0
 
     - name: Enable MFA for users
-      stevefulme1.alibaba_cloud.ali_ram_user:
+      stevefulme1.alibaba_cloud.ram_user:
         user_name: "{{ item.name }}"
         mfa_bind_required: true
         region: "{{ ram_region }}"
