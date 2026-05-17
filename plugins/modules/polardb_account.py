@@ -77,7 +77,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         db_cluster_id=dict(type="str", required=True),
         account_name=dict(type="str", required=True),
-        account_password=dict(type="str", no_log=False),
+        account_password=dict(type="str", no_log=True),
         account_type=dict(type="str", choices=["Normal", "Super"], default="Normal"),
     )
     spec.update(alibaba_argument_spec)
