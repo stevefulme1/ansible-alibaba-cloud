@@ -89,10 +89,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("project_name") is not None:
+        params["ProjectName"] = module.params["project_name"]
+    if module.params.get("comment") is not None:
+        params["Comment"] = module.params["comment"]
+    if module.params.get("default_quota") is not None:
+        params["DefaultQuota"] = module.params["default_quota"]
+
+
     try:
         existing = client.get(
             "ListProjects",
-            {},
+            params,
             service_endpoint="maxcompute.aliyuncs.com",
             api_version="2022-01-04",
         )
@@ -109,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateProject",
-                    {},
+                    params,
                     service_endpoint="maxcompute.aliyuncs.com",
                     api_version="2022-01-04",
                 )
@@ -123,7 +132,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteProject",
-                    {},
+                    params,
                     service_endpoint="maxcompute.aliyuncs.com",
                     api_version="2022-01-04",
                 )
