@@ -25,7 +25,8 @@ options:
   instance_name:
     description: Table Store instance name.
     type: str
-    required: true  limit:
+    required: true
+  limit:
     description:
       - Maximum number of results to return.
     type: int
