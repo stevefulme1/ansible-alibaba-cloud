@@ -93,10 +93,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("smart_ag_name") is not None:
+        params["SmartAgName"] = module.params["smart_ag_name"]
+    if module.params.get("max_band_width") is not None:
+        params["MaxBandWidth"] = module.params["max_band_width"]
+    if module.params.get("smart_ag_id") is not None:
+        params["SmartAgId"] = module.params["smart_ag_id"]
+
+
     try:
         result = client.get(
             "DescribeSmartAccessGateways",
-            {},
+            params,
             service_endpoint="smartag.aliyuncs.com",
             api_version="2018-03-13",
         )
@@ -113,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateSmartAccessGateway",
-                    {},
+                    params,
                     service_endpoint="smartag.aliyuncs.com",
                     api_version="2018-03-13",
                 )
@@ -130,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteSmartAccessGateway",
-                    {},
+                    params,
                     service_endpoint="smartag.aliyuncs.com",
                     api_version="2018-03-13",
                 )
