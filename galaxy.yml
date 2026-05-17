@@ -10,7 +10,6 @@ description: >-
   Full-scope coverage of ECS, VPC, SLB, RAM, KMS, and more.
 license:
   - GPL-3.0-or-later
-license_file: LICENSE
 tags:
   - alibaba
   - alicloud
