@@ -104,11 +104,24 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("domain_name") is not None:
+        params["DomainName"] = module.params["domain_name"]
+    if module.params.get("rr") is not None:
+        params["RR"] = module.params["rr"]
+    if module.params.get("record_type") is not None:
+        params["RecordType"] = module.params["record_type"]
+    if module.params.get("record_value") is not None:
+        params["RecordValue"] = module.params["record_value"]
+    if module.params.get("record_id") is not None:
+        params["RecordId"] = module.params["record_id"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDomainRecords",
-            {},
+            params,
             service_endpoint="alidns.aliyuncs.com",
             api_version="2015-01-09",
         )
@@ -125,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AddDomainRecord",
-                    {},
+                    params,
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )
@@ -142,7 +155,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDomainRecord",
-                    {},
+                    params,
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )

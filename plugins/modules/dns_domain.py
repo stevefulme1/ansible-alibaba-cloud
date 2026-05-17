@@ -85,11 +85,16 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("domain_name") is not None:
+        params["DomainName"] = module.params["domain_name"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDomains",
-            {},
+            params,
             service_endpoint="alidns.aliyuncs.com",
             api_version="2015-01-09",
         )
@@ -106,7 +111,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AddDomain",
-                    {},
+                    params,
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )
@@ -123,7 +128,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDomain",
-                    {},
+                    params,
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )
