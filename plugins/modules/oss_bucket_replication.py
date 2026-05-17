@@ -93,10 +93,18 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("bucket_name") is not None:
+        params["BucketName"] = module.params["bucket_name"]
+    if module.params.get("target_bucket_name") is not None:
+        params["TargetBucketName"] = module.params["target_bucket_name"]
+    if module.params.get("target_location") is not None:
+        params["TargetLocation"] = module.params["target_location"]
+
     try:
         result = client.get(
             "GetBucketReplication",
-            {},
+            params,
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -113,7 +121,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketReplication",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -130,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketReplication",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

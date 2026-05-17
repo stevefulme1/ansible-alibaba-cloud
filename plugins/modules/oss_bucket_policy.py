@@ -88,10 +88,16 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("bucket_name") is not None:
+        params["BucketName"] = module.params["bucket_name"]
+    if module.params.get("policy") is not None:
+        params["Policy"] = module.params["policy"]
+
     try:
         result = client.get(
             "GetBucketPolicy",
-            {},
+            params,
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -108,7 +114,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketPolicy",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -125,7 +131,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketPolicy",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

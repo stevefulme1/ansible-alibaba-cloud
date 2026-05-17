@@ -78,11 +78,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("bucket_name") is not None:
+        params["BucketName"] = module.params["bucket_name"]
+    if module.params.get("acl") is not None:
+        params["ACL"] = module.params["acl"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetBucketAcl",
-            {},
+            params,
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -99,7 +105,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketAcl",
-                    {},
+                    params,
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
