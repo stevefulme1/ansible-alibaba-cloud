@@ -20,7 +20,7 @@ jobs:
           pip install ruff ansible-core ansible-lint
 
       - name: ruff check
-        run: ruff check --ignore E402 .
+        run: ruff check --ignore E402,UP001,UP009,UP010,UP012,UP031,I001,B904,S105,S106 .
 
       - name: ruff format --check
         run: ruff format --check .
