@@ -95,11 +95,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("policy_name") is not None:
+        params["PolicyName"] = module.params["policy_name"]
+    if module.params.get("policy_document") is not None:
+        params["PolicyDocument"] = module.params["policy_document"]
+    if module.params.get("policy_type") is not None:
+        params["PolicyType"] = module.params["policy_type"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListPolicies",
-            {},
+            params,
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -116,7 +124,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreatePolicy",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -133,7 +141,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeletePolicy",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )

@@ -90,11 +90,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("user_name") is not None:
+        params["UserName"] = module.params["user_name"]
+    if module.params.get("display_name") is not None:
+        params["DisplayName"] = module.params["display_name"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListUsers",
-            {},
+            params,
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -111,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateUser",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -128,7 +134,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteUser",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )

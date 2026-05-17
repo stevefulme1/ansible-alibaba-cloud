@@ -97,11 +97,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("role_name") is not None:
+        params["RoleName"] = module.params["role_name"]
+    if module.params.get("policy_name") is not None:
+        params["PolicyName"] = module.params["policy_name"]
+    if module.params.get("policy_type") is not None:
+        params["PolicyType"] = module.params["policy_type"]
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListPoliciesForRole",
-            {},
+            params,
             service_endpoint="ram.aliyuncs.com",
             api_version="2015-05-01",
         )
@@ -118,7 +126,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AttachPolicyToRole",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
@@ -135,7 +143,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DetachPolicyFromRole",
-                    {},
+                    params,
                     service_endpoint="ram.aliyuncs.com",
                     api_version="2015-05-01",
                 )
