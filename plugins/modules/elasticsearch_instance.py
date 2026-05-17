@@ -105,10 +105,25 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("es_version") is not None:
+        params["EsVersion"] = module.params["es_version"]
+    if module.params.get("instance_category") is not None:
+        params["InstanceCategory"] = module.params["instance_category"]
+    if module.params.get("data_node_spec") is not None:
+        params["DataNodeSpec"] = module.params["data_node_spec"]
+    if module.params.get("data_node_amount") is not None:
+        params["DataNodeAmount"] = module.params["data_node_amount"]
+    if module.params.get("data_node_disk_size") is not None:
+        params["DataNodeDiskSize"] = module.params["data_node_disk_size"]
+
+
     try:
         result = client.get(
             "ListInstance",
-            {},
+            params,
             service_endpoint="elasticsearch.aliyuncs.com",
             api_version="2017-06-13",
         )
@@ -125,7 +140,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "createInstance",
-                    {},
+                    params,
                     service_endpoint="elasticsearch.aliyuncs.com",
                     api_version="2017-06-13",
                 )
@@ -142,7 +157,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    {},
+                    params,
                     service_endpoint="elasticsearch.aliyuncs.com",
                     api_version="2017-06-13",
                 )
