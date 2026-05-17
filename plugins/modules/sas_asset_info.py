@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   machine_types:
     description: Filter by machine type.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   instance_id:
     description: Filter by instance ID.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   aggregator_name:
     description: Filter by aggregator name.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

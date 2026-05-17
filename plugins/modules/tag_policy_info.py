@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   policy_name:
     description: Filter by policy name.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

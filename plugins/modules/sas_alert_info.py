@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   severity:
     description: Filter by severity level.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

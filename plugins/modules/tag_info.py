@@ -28,7 +28,8 @@ options:
     required: true
   tag_key:
     description: Filter by tag key.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

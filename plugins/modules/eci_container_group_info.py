@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   container_group_name:
     description: Filter by container group name.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

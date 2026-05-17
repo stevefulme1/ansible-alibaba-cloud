@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   directory_id:
     description: Filter by directory ID.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int

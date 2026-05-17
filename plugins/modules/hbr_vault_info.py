@@ -24,7 +24,8 @@ extends_documentation_fragment:
 options:
   vault_id:
     description: Filter by vault ID.
-    type: str  limit:
+    type: str
+  limit:
     description:
       - Maximum number of results to return.
     type: int
