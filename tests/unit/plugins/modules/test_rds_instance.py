@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -19,7 +19,7 @@ def mock_api_client():
     client = MagicMock()
     client.get.return_value = None
     client.create.return_value = {"instance_id": "res-123", "instance_name": "test-rds_instance"}
-    client.update.return_value = {"instance_id": "res-123", "instance_name": "test-rds_instance-updated"}
+    client.update.return_value = {"instance_id": "res-123", "new_instance_name": "test-rds_instance-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -166,7 +166,7 @@ class TestListRdsInstance:
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
             {"instance_id": "1", "instance_name": "first"},
-            {"instance_id": "2", "instance_name": "second"},
+            {"instance_id": "2", "new_instance_name": "second"},
         ]
         result = mock_api_client.list("rds_instance")
         assert len(result) == 2
@@ -179,7 +179,7 @@ class TestListRdsInstance:
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
         mock_api_client.list.return_value = [{"instance_id": "1", "instance_name": "match"}]
-        result = mock_api_client.list("rds_instance", filters={"instance_name": "match"})
+        result = mock_api_client.list("rds_instance", filters={"new_instance_name": "match"})
         assert len(result) == 1
 
 

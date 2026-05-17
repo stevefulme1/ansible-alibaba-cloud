@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -19,7 +19,7 @@ def mock_api_client():
     client = MagicMock()
     client.get.return_value = None
     client.create.return_value = {"load_balancer_id": "res-123", "load_balancer_name": "test-slb_instance"}
-    client.update.return_value = {"load_balancer_id": "res-123", "load_balancer_name": "test-slb_instance-updated"}
+    client.update.return_value = {"load_balancer_id": "res-123", "new_load_balancer_name": "test-slb_instance-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -166,7 +166,7 @@ class TestListSlbInstance:
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
             {"load_balancer_id": "1", "load_balancer_name": "first"},
-            {"load_balancer_id": "2", "load_balancer_name": "second"},
+            {"load_balancer_id": "2", "new_load_balancer_name": "second"},
         ]
         result = mock_api_client.list("slb_instance")
         assert len(result) == 2
@@ -179,7 +179,7 @@ class TestListSlbInstance:
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
         mock_api_client.list.return_value = [{"load_balancer_id": "1", "load_balancer_name": "match"}]
-        result = mock_api_client.list("slb_instance", filters={"load_balancer_name": "match"})
+        result = mock_api_client.list("slb_instance", filters={"new_load_balancer_name": "match"})
         assert len(result) == 1
 
 

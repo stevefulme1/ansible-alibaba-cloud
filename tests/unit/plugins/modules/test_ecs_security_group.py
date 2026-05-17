@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -19,7 +19,7 @@ def mock_api_client():
     client = MagicMock()
     client.get.return_value = None
     client.create.return_value = {"security_group_id": "res-123", "security_group_name": "test-ecs_security_group"}
-    client.update.return_value = {"security_group_id": "res-123", "security_group_name": "test-ecs_security_group-updated"}
+    client.update.return_value = {"security_group_id": "res-123", "new_security_group_name": "test-ecs_security_group-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -166,7 +166,7 @@ class TestListEcsSecurityGroup:
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
             {"security_group_id": "1", "security_group_name": "first"},
-            {"security_group_id": "2", "security_group_name": "second"},
+            {"security_group_id": "2", "new_security_group_name": "second"},
         ]
         result = mock_api_client.list("ecs_security_group")
         assert len(result) == 2
@@ -179,7 +179,7 @@ class TestListEcsSecurityGroup:
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
         mock_api_client.list.return_value = [{"security_group_id": "1", "security_group_name": "match"}]
-        result = mock_api_client.list("ecs_security_group", filters={"security_group_name": "match"})
+        result = mock_api_client.list("ecs_security_group", filters={"new_security_group_name": "match"})
         assert len(result) == 1
 
 

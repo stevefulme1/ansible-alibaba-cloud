@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -18,8 +18,8 @@ def mock_api_client():
     """Mock API client for oss_bucket."""
     client = MagicMock()
     client.get.return_value = None
-    client.create.return_value = {"bucket_name": "res-123", "bucket_name": "test-oss_bucket"}
-    client.update.return_value = {"bucket_name": "res-123", "bucket_name": "test-oss_bucket-updated"}
+    client.create.return_value = {"bucket_name": "res-123", "new_bucket_name": "test-oss_bucket"}
+    client.update.return_value = {"new_bucket_name": "res-123", "bucket_name": "test-oss_bucket-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -30,7 +30,7 @@ def existing_resource():
     """Return a dict representing an existing oss_bucket."""
     return {
         "bucket_name": "res-123",
-        "bucket_name": "test-oss_bucket",
+        "new_bucket_name": "test-oss_bucket",
         "state": "active",
     }
 
@@ -165,8 +165,8 @@ class TestListOssBucket:
     def test_list_returns_all(self, mock_api_client):
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
-            {"bucket_name": "1", "bucket_name": "first"},
-            {"bucket_name": "2", "bucket_name": "second"},
+            {"bucket_name": "1", "new_bucket_name": "first"},
+            {"new_bucket_name": "2", "bucket_name": "second"},
         ]
         result = mock_api_client.list("oss_bucket")
         assert len(result) == 2
@@ -178,8 +178,8 @@ class TestListOssBucket:
 
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
-        mock_api_client.list.return_value = [{"bucket_name": "1", "bucket_name": "match"}]
-        result = mock_api_client.list("oss_bucket", filters={"bucket_name": "match"})
+        mock_api_client.list.return_value = [{"bucket_name": "1", "new_bucket_name": "match"}]
+        result = mock_api_client.list("oss_bucket", filters={"new_bucket_name": "match"})
         assert len(result) == 1
 
 

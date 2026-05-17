@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -18,8 +18,8 @@ def mock_api_client():
     """Mock API client for ecs_key_pair."""
     client = MagicMock()
     client.get.return_value = None
-    client.create.return_value = {"key_pair_name": "res-123", "key_pair_name": "test-ecs_key_pair"}
-    client.update.return_value = {"key_pair_name": "res-123", "key_pair_name": "test-ecs_key_pair-updated"}
+    client.create.return_value = {"key_pair_name": "res-123", "new_key_pair_name": "test-ecs_key_pair"}
+    client.update.return_value = {"new_key_pair_name": "res-123", "key_pair_name": "test-ecs_key_pair-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -30,7 +30,7 @@ def existing_resource():
     """Return a dict representing an existing ecs_key_pair."""
     return {
         "key_pair_name": "res-123",
-        "key_pair_name": "test-ecs_key_pair",
+        "new_key_pair_name": "test-ecs_key_pair",
         "state": "active",
     }
 
@@ -165,8 +165,8 @@ class TestListEcsKeyPair:
     def test_list_returns_all(self, mock_api_client):
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
-            {"key_pair_name": "1", "key_pair_name": "first"},
-            {"key_pair_name": "2", "key_pair_name": "second"},
+            {"key_pair_name": "1", "new_key_pair_name": "first"},
+            {"new_key_pair_name": "2", "key_pair_name": "second"},
         ]
         result = mock_api_client.list("ecs_key_pair")
         assert len(result) == 2
@@ -178,8 +178,8 @@ class TestListEcsKeyPair:
 
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
-        mock_api_client.list.return_value = [{"key_pair_name": "1", "key_pair_name": "match"}]
-        result = mock_api_client.list("ecs_key_pair", filters={"key_pair_name": "match"})
+        mock_api_client.list.return_value = [{"key_pair_name": "1", "new_key_pair_name": "match"}]
+        result = mock_api_client.list("ecs_key_pair", filters={"new_key_pair_name": "match"})
         assert len(result) == 1
 
 

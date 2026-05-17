@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -18,8 +18,8 @@ def mock_api_client():
     """Mock API client for ram_user."""
     client = MagicMock()
     client.get.return_value = None
-    client.create.return_value = {"user_name": "res-123", "user_name": "test-ram_user"}
-    client.update.return_value = {"user_name": "res-123", "user_name": "test-ram_user-updated"}
+    client.create.return_value = {"user_name": "res-123", "new_user_name": "test-ram_user"}
+    client.update.return_value = {"new_user_name": "res-123", "user_name": "test-ram_user-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -30,7 +30,7 @@ def existing_resource():
     """Return a dict representing an existing ram_user."""
     return {
         "user_name": "res-123",
-        "user_name": "test-ram_user",
+        "new_user_name": "test-ram_user",
         "state": "active",
     }
 
@@ -165,8 +165,8 @@ class TestListRamUser:
     def test_list_returns_all(self, mock_api_client):
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
-            {"user_name": "1", "user_name": "first"},
-            {"user_name": "2", "user_name": "second"},
+            {"user_name": "1", "new_user_name": "first"},
+            {"new_user_name": "2", "user_name": "second"},
         ]
         result = mock_api_client.list("ram_user")
         assert len(result) == 2
@@ -178,8 +178,8 @@ class TestListRamUser:
 
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
-        mock_api_client.list.return_value = [{"user_name": "1", "user_name": "match"}]
-        result = mock_api_client.list("ram_user", filters={"user_name": "match"})
+        mock_api_client.list.return_value = [{"user_name": "1", "new_user_name": "match"}]
+        result = mock_api_client.list("ram_user", filters={"new_user_name": "match"})
         assert len(result) == 1
 
 

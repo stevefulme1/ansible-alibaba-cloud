@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -19,7 +19,7 @@ def mock_api_client():
     client = MagicMock()
     client.get.return_value = None
     client.create.return_value = {"vpc_id": "res-123", "vpc_name": "test-vpc"}
-    client.update.return_value = {"vpc_id": "res-123", "vpc_name": "test-vpc-updated"}
+    client.update.return_value = {"vpc_id": "res-123", "new_vpc_name": "test-vpc-updated"}
     client.delete.return_value = None
     client.list.return_value = []
     return client
@@ -166,7 +166,7 @@ class TestListVpc:
         """Verify list returns all resources."""
         mock_api_client.list.return_value = [
             {"vpc_id": "1", "vpc_name": "first"},
-            {"vpc_id": "2", "vpc_name": "second"},
+            {"vpc_id": "2", "new_vpc_name": "second"},
         ]
         result = mock_api_client.list("vpc")
         assert len(result) == 2
@@ -179,7 +179,7 @@ class TestListVpc:
     def test_list_with_filter(self, mock_api_client):
         """Verify list applies filters."""
         mock_api_client.list.return_value = [{"vpc_id": "1", "vpc_name": "match"}]
-        result = mock_api_client.list("vpc", filters={"vpc_name": "match"})
+        result = mock_api_client.list("vpc", filters={"new_vpc_name": "match"})
         assert len(result) == 1
 
 
