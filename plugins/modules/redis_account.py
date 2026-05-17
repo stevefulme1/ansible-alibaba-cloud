@@ -92,11 +92,22 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("account_name") is not None:
+        params["AccountName"] = module.params["account_name"]
+    if module.params.get("account_password") is not None:
+        params["AccountPassword"] = module.params["account_password"]
+    if module.params.get("account_privilege") is not None:
+        params["AccountPrivilege"] = module.params["account_privilege"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeAccounts",
-            {},
+            params,
             service_endpoint="r-kvstore.aliyuncs.com",
             api_version="2015-01-01",
         )
@@ -113,7 +124,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAccount",
-                    {},
+                    params,
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )
@@ -134,7 +145,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAccount",
-                    {},
+                    params,
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )

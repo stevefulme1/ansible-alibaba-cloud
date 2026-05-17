@@ -93,10 +93,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("security_ip_group_name") is not None:
+        params["SecurityIpGroupName"] = module.params["security_ip_group_name"]
+    if module.params.get("security_ips") is not None:
+        params["SecurityIps"] = module.params["security_ips"]
+
+
     try:
         result = client.get(
             "DescribeSecurityIps",
-            {},
+            params,
             service_endpoint="r-kvstore.aliyuncs.com",
             api_version="2015-01-01",
         )
@@ -113,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "ModifySecurityIps",
-                    {},
+                    params,
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )
@@ -130,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "ModifySecurityIps",
-                    {},
+                    params,
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )
