@@ -102,10 +102,23 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("topic") is not None:
+        params["Topic"] = module.params["topic"]
+    if module.params.get("remark") is not None:
+        params["Remark"] = module.params["remark"]
+    if module.params.get("partition_num") is not None:
+        params["PartitionNum"] = module.params["partition_num"]
+    if module.params.get("compact_topic") is not None:
+        params["CompactTopic"] = module.params["compact_topic"]
+
+
     try:
         existing = client.get(
             "DescribeTopic",
-            {},
+            params,
             service_endpoint="alikafka.{region_id}.aliyuncs.com",
             api_version="2019-09-16",
         )
@@ -122,7 +135,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateTopic",
-                    {},
+                    params,
                     service_endpoint="alikafka.{region_id}.aliyuncs.com",
                     api_version="2019-09-16",
                 )
@@ -139,7 +152,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteTopic",
-                    {},
+                    params,
                     service_endpoint="alikafka.{region_id}.aliyuncs.com",
                     api_version="2019-09-16",
                 )
