@@ -93,10 +93,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("project_name") is not None:
+        params["ProjectName"] = module.params["project_name"]
+    if module.params.get("group_name") is not None:
+        params["GroupName"] = module.params["group_name"]
+    if module.params.get("machine_list") is not None:
+        params["MachineList"] = module.params["machine_list"]
+
+
     try:
         result = client.get(
             "ListMachineGroup",
-            {},
+            params,
             service_endpoint="sls.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -113,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateMachineGroup",
-                    {},
+                    params,
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -130,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteMachineGroup",
-                    {},
+                    params,
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )

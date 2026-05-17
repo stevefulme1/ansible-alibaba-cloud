@@ -88,10 +88,17 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("display_name") is not None:
+        params["DisplayName"] = module.params["display_name"]
+    if module.params.get("aliuid") is not None:
+        params["Aliuid"] = module.params["aliuid"]
+
+
     try:
         result = client.get(
             "DescribeAudit",
-            {},
+            params,
             service_endpoint="sls.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -108,7 +115,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAudit",
-                    {},
+                    params,
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -125,7 +132,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAudit",
-                    {},
+                    params,
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )
