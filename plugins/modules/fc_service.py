@@ -93,10 +93,21 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("service_name") is not None:
+        params["ServiceName"] = module.params["service_name"]
+    if module.params.get("description") is not None:
+        params["Description"] = module.params["description"]
+    if module.params.get("role") is not None:
+        params["Role"] = module.params["role"]
+    if module.params.get("log_config") is not None:
+        params["LogConfig"] = module.params["log_config"]
+
+
     try:
         existing = client.get(
             "ListServices",
-            {},
+            params,
             service_endpoint="fc.aliyuncs.com",
             api_version="2021-04-06",
         )
@@ -113,7 +124,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateService",
-                    {},
+                    params,
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2021-04-06",
                 )
@@ -127,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteService",
-                    {},
+                    params,
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2021-04-06",
                 )
