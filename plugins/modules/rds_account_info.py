@@ -74,6 +74,10 @@ def main():
     )
 
     params = {}
+    if module.params.get("db_instance_id") is not None:
+        params["DBInstanceId"] = module.params["db_instance_id"]
+    if module.params.get("account_name") is not None:
+        params["AccountName"] = module.params["account_name"]
     try:
         result = client.get(
             "DescribeAccounts",

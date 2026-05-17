@@ -93,10 +93,18 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("db_instance_id") is not None:
+        params["DBInstanceId"] = module.params["db_instance_id"]
+    if module.params.get("db_proxy_instance_type") is not None:
+        params["DBProxyInstanceType"] = module.params["db_proxy_instance_type"]
+    if module.params.get("db_proxy_instance_num") is not None:
+        params["DBProxyInstanceNum"] = module.params["db_proxy_instance_num"]
+
     try:
         result = client.get(
             "DescribeDBProxy",
-            {},
+            params,
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -113,7 +121,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "ModifyDBProxy",
-                    {},
+                    params,
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
@@ -130,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "ModifyDBProxy",
-                    {},
+                    params,
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
