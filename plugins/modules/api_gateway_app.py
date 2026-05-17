@@ -89,10 +89,19 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("app_name") is not None:
+        params["AppName"] = module.params["app_name"]
+    if module.params.get("app_id") is not None:
+        params["AppId"] = module.params["app_id"]
+    if module.params.get("description") is not None:
+        params["Description"] = module.params["description"]
+
+
     try:
         existing = client.get(
             "DescribeApps",
-            {},
+            params,
             service_endpoint="apigateway.aliyuncs.com",
             api_version="2016-07-14",
         )
@@ -109,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateApp",
-                    {},
+                    params,
                     service_endpoint="apigateway.aliyuncs.com",
                     api_version="2016-07-14",
                 )
@@ -123,7 +132,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteApp",
-                    {},
+                    params,
                     service_endpoint="apigateway.aliyuncs.com",
                     api_version="2016-07-14",
                 )
