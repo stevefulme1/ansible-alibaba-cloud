@@ -106,7 +106,7 @@ def _sign_request(params, access_key_secret, method="GET"):
     h = hmac.new(
         (access_key_secret + "&").encode("utf-8"),
         string_to_sign.encode("utf-8"),
-        hashlib.sha1,
+        hashlib.sha256,
     )
     import base64
 
@@ -123,7 +123,7 @@ def _call_actiontrail(
         "Version": "2020-07-06",
         "Format": "JSON",
         "AccessKeyId": access_key_id,
-        "SignatureMethod": "HMAC-SHA1",
+        "SignatureMethod": "HMAC-SHA256",
         "SignatureVersion": "1.0",
         "SignatureNonce": str(uuid.uuid4()),
         "Timestamp": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
