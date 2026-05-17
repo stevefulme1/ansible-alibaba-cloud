@@ -96,11 +96,24 @@ def main():
     state = module.params["state"]
     changed = False
 
+    params = {}
+    if module.params.get("instance_id") is not None:
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("repo_name") is not None:
+        params["RepoName"] = module.params["repo_name"]
+    if module.params.get("repo_namespace_name") is not None:
+        params["RepoNamespaceName"] = module.params["repo_namespace_name"]
+    if module.params.get("repo_type") is not None:
+        params["RepoType"] = module.params["repo_type"]
+    if module.params.get("summary") is not None:
+        params["Summary"] = module.params["summary"]
+
+
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListRepository",
-            {},
+            params,
             service_endpoint="cr.aliyuncs.com",
             api_version="2018-12-01",
         )
@@ -117,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateRepository",
-                    {},
+                    params,
                     service_endpoint="cr.aliyuncs.com",
                     api_version="2018-12-01",
                 )
@@ -138,7 +151,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteRepository",
-                    {},
+                    params,
                     service_endpoint="cr.aliyuncs.com",
                     api_version="2018-12-01",
                 )
