@@ -1,0 +1,80 @@
+---
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - net_vpc_name is defined and net_vpc_name | length > 0
+    fail_msg: "Required variable: net_vpc_name"
+
+- name: Deploy network stack
+  block:
+    - name: Create VPC
+      alibaba.alicloud.ali_vpc:
+        cidr_block: "{{ net_vpc_cidr }}"
+        vpc_name: "{{ net_vpc_name }}"
+        region: "{{ net_region }}"
+        state: "{{ net_state }}"
+      register: _net_vpc
+
+    - name: Create vSwitches
+      alibaba.alicloud.ali_vswitch:
+        vpc_id: "{{ _net_vpc.vpc.vpc_id }}"
+        cidr_block: "{{ item.cidr }}"
+        vswitch_name: "{{ item.name }}"
+        zone_id: "{{ item.zone_id }}"
+        region: "{{ net_region }}"
+        state: "{{ net_state }}"
+      loop: "{{ net_vswitches }}"
+      loop_control:
+        label: "{{ item.name }}"
+      register: _net_vswitches
+
+    - name: Create NAT gateway
+      alibaba.alicloud.ali_nat_gateway:
+        vpc_id: "{{ _net_vpc.vpc.vpc_id }}"
+        nat_gateway_name: "{{ net_nat_gateway_name }}"
+        spec: "{{ net_nat_spec }}"
+        region: "{{ net_region }}"
+        state: "{{ net_state }}"
+      register: _net_nat
+      when: net_nat_gateway_enabled
+
+    - name: Allocate EIP
+      alibaba.alicloud.ali_eip:
+        bandwidth: "{{ net_eip_bandwidth }}"
+        internet_charge_type: "{{ net_eip_internet_charge_type }}"
+        region: "{{ net_region }}"
+        state: "{{ net_state }}"
+      register: _net_eip
+      when: net_eip_enabled
+
+    - name: Bind EIP to NAT gateway
+      alibaba.alicloud.ali_eip:
+        allocation_id: "{{ _net_eip.eip.allocation_id }}"
+        instance_id: "{{ _net_nat.nat_gateway.nat_gateway_id }}"
+        instance_type: Nat
+        region: "{{ net_region }}"
+        state: "{{ net_state }}"
+      when:
+        - net_eip_enabled
+        - net_nat_gateway_enabled
+        - _net_eip.eip is defined
+        - _net_nat.nat_gateway is defined
+
+    - name: Configure SNAT entry
+      alibaba.alicloud.ali_snat_entry:
+        snat_table_id: "{{ _net_nat.nat_gateway.snat_table_ids[0] }}"
+        source_cidr: "{{ net_snat_cidr }}"
+        snat_ip: "{{ _net_eip.eip.ip_address }}"
+        region: "{{ net_region }}"
+        state: "{{ net_state }}"
+      when:
+        - net_snat_enabled
+        - net_nat_gateway_enabled
+        - net_eip_enabled
+
+  rescue:
+    - name: Report network stack failure
+      ansible.builtin.fail:
+        msg: >-
+          Network stack deployment failed for VPC '{{ net_vpc_name }}'.
+          Error: {{ ansible_failed_result.msg | default('Unknown error') }}

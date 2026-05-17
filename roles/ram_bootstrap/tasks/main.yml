@@ -1,0 +1,88 @@
+---
+- name: Bootstrap RAM identity
+  block:
+    - name: Configure password policy
+      alibaba.alicloud.ali_ram_policy:
+        minimum_password_length: "{{ ram_password_min_length }}"
+        require_lowercase_characters: "{{ ram_password_require_lowercase }}"
+        require_uppercase_characters: "{{ ram_password_require_uppercase }}"
+        require_numbers: "{{ ram_password_require_numbers }}"
+        require_symbols: "{{ ram_password_require_symbols }}"
+        max_password_age: "{{ ram_password_max_age }}"
+        password_reuse_prevention: "{{ ram_password_history_count }}"
+        region: "{{ ram_region }}"
+      when: ram_password_policy_enabled
+
+    - name: Create custom policies
+      alibaba.alicloud.ali_ram_policy:
+        policy_name: "{{ item.name }}"
+        policy_document: "{{ item.document | to_json }}"
+        policy_type: Custom
+        region: "{{ ram_region }}"
+        state: "{{ ram_state }}"
+      loop: "{{ ram_custom_policies }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: ram_custom_policies | length > 0
+
+    - name: Create RAM groups
+      alibaba.alicloud.ali_ram_group:
+        group_name: "{{ item.name }}"
+        region: "{{ ram_region }}"
+        state: "{{ ram_state }}"
+      loop: "{{ ram_groups }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: ram_groups | length > 0
+
+    - name: Attach policies to groups
+      alibaba.alicloud.ali_ram_group:
+        group_name: "{{ item.0.name }}"
+        policies:
+          - "{{ item.1 }}"
+        region: "{{ ram_region }}"
+        state: "{{ ram_state }}"
+      loop: "{{ ram_groups | subelements('policies', skip_missing=True) }}"
+      loop_control:
+        label: "{{ item.0.name }}/{{ item.1 }}"
+      when: ram_groups | length > 0
+
+    - name: Create RAM users
+      alibaba.alicloud.ali_ram_user:
+        user_name: "{{ item.name }}"
+        display_name: "{{ item.display_name | default(item.name) }}"
+        region: "{{ ram_region }}"
+        state: "{{ ram_state }}"
+      loop: "{{ ram_users }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: ram_users | length > 0
+
+    - name: Add users to groups
+      alibaba.alicloud.ali_ram_group:
+        group_name: "{{ item.1 }}"
+        users:
+          - "{{ item.0.name }}"
+        region: "{{ ram_region }}"
+        state: "{{ ram_state }}"
+      loop: "{{ ram_users | subelements('groups', skip_missing=True) }}"
+      loop_control:
+        label: "{{ item.0.name }} -> {{ item.1 }}"
+      when: ram_users | length > 0
+
+    - name: Enable MFA for users
+      alibaba.alicloud.ali_ram_user:
+        user_name: "{{ item.name }}"
+        mfa_bind_required: true
+        region: "{{ ram_region }}"
+      loop: "{{ ram_users | selectattr('mfa_enabled', 'defined') | selectattr('mfa_enabled') | list }}"
+      loop_control:
+        label: "{{ item.name }}"
+      when: ram_users | length > 0
+
+  rescue:
+    - name: Report RAM bootstrap failure
+      ansible.builtin.fail:
+        msg: >-
+          RAM bootstrap failed.
+          Error: {{ ansible_failed_result.msg | default('Unknown error') }}

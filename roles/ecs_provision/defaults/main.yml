@@ -1,0 +1,39 @@
+---
+# Required variables (validated at runtime)
+# ecs_instance_name: ""
+# ecs_image_id: ""
+# ecs_instance_type: ""
+
+# VPC configuration
+ecs_vpc_name: "ansible-vpc"
+ecs_vpc_cidr: "172.16.0.0/16"
+ecs_vswitch_name: "ansible-vswitch"
+ecs_vswitch_cidr: "172.16.1.0/24"
+ecs_zone_id: "cn-hangzhou-a"
+ecs_region: "cn-hangzhou"
+
+# Security group
+ecs_security_group_name: "ansible-sg"
+ecs_security_group_rules:
+  - ip_protocol: tcp
+    port_range: "22/22"
+    source_cidr_ip: "0.0.0.0/0"
+    policy: accept
+  - ip_protocol: tcp
+    port_range: "443/443"
+    source_cidr_ip: "0.0.0.0/0"
+    policy: accept
+
+# Instance settings
+ecs_internet_max_bandwidth_out: 10
+ecs_system_disk_category: "cloud_efficiency"
+ecs_system_disk_size: 40
+ecs_instance_charge_type: "PostPaid"
+ecs_allocate_public_ip: true
+ecs_instance_tags: {}
+ecs_key_pair_name: ""
+ecs_password: ""
+ecs_count: 1
+ecs_state: present
+ecs_wait: true
+ecs_wait_timeout: 300

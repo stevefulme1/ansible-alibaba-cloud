@@ -1,0 +1,43 @@
+---
+ram_region: "cn-hangzhou"
+ram_state: present
+
+# Groups
+ram_groups: []
+#   - name: developers
+#     policies:
+#       - AliyunECSFullAccess
+#       - AliyunVPCReadOnlyAccess
+
+# Users
+ram_users: []
+#   - name: dev-user
+#     display_name: "Developer User"
+#     groups:
+#       - developers
+#     mfa_enabled: true
+#     console_access: true
+#     api_access: true
+
+# Custom policies
+ram_custom_policies: []
+#   - name: custom-readonly
+#     document:
+#       Version: "1"
+#       Statement:
+#         - Effect: Allow
+#           Action: ["ecs:Describe*", "vpc:Describe*"]
+#           Resource: ["*"]
+
+# Password policy
+ram_password_policy_enabled: true
+ram_password_min_length: 12
+ram_password_require_lowercase: true
+ram_password_require_uppercase: true
+ram_password_require_numbers: true
+ram_password_require_symbols: true
+ram_password_max_age: 90
+ram_password_history_count: 5
+
+# MFA
+ram_enforce_mfa: false
