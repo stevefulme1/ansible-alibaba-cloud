@@ -1,0 +1,7 @@
+---
+# Integration test configuration for stevefulme1.alibaba_cloud
+alibaba_cloud_access_key: "CHANGEME"
+alibaba_cloud_secret_key: "CHANGEME"
+alibaba_cloud_region: "CHANGEME"
+validate_certs: true
+resource_prefix: "ansible-ci-alibaba_cloud"
