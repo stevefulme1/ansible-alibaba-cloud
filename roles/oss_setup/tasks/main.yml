@@ -8,7 +8,7 @@
 - name: Configure OSS bucket
   block:
     - name: Create OSS bucket
-      alibaba.alicloud.ali_oss_bucket:
+      stevefulme1.alibaba_cloud.ali_oss_bucket:
         bucket: "{{ oss_bucket_name }}"
         acl: "{{ oss_acl }}"
         storage_class: "{{ oss_storage_class }}"
@@ -18,14 +18,14 @@
       register: _oss_bucket
 
     - name: Configure bucket versioning
-      alibaba.alicloud.ali_oss_bucket:
+      stevefulme1.alibaba_cloud.ali_oss_bucket:
         bucket: "{{ oss_bucket_name }}"
         versioning: "{{ 'Enabled' if oss_versioning else 'Suspended' }}"
         region: "{{ oss_region }}"
         state: present
 
     - name: Configure server-side encryption
-      alibaba.alicloud.ali_oss_bucket:
+      stevefulme1.alibaba_cloud.ali_oss_bucket:
         bucket: "{{ oss_bucket_name }}"
         encryption_rule:
           sse_algorithm: "{{ oss_encryption_algorithm }}"
@@ -34,7 +34,7 @@
       when: oss_encryption_enabled
 
     - name: Configure bucket logging
-      alibaba.alicloud.ali_oss_bucket:
+      stevefulme1.alibaba_cloud.ali_oss_bucket:
         bucket: "{{ oss_bucket_name }}"
         logging:
           target_bucket: "{{ oss_logging_target_bucket }}"
@@ -46,7 +46,7 @@
         - oss_logging_target_bucket | length > 0
 
     - name: Configure lifecycle rules
-      alibaba.alicloud.ali_oss_bucket:
+      stevefulme1.alibaba_cloud.ali_oss_bucket:
         bucket: "{{ oss_bucket_name }}"
         lifecycle:
           - name: "{{ item.name }}"
@@ -65,7 +65,7 @@
       when: oss_lifecycle_rules | length > 0
 
     - name: Configure CORS rules
-      alibaba.alicloud.ali_oss_bucket:
+      stevefulme1.alibaba_cloud.ali_oss_bucket:
         bucket: "{{ oss_bucket_name }}"
         cors:
           - allowed_origins: "{{ item.allowed_origins }}"

@@ -13,7 +13,7 @@
 - name: Deploy RDS instance
   block:
     - name: Create RDS instance
-      alibaba.alicloud.ali_rds_instance:
+      stevefulme1.alibaba_cloud.ali_rds_instance:
         db_instance_description: "{{ rds_instance_name }}"
         engine: "{{ rds_engine }}"
         engine_version: "{{ rds_engine_version }}"
@@ -30,7 +30,7 @@
       register: _rds_instance
 
     - name: Configure backup policy
-      alibaba.alicloud.ali_rds_backup:
+      stevefulme1.alibaba_cloud.ali_rds_backup:
         db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
         preferred_backup_time: "{{ rds_backup_time }}"
         preferred_backup_period: "{{ rds_backup_period | join(',') }}"
@@ -40,7 +40,7 @@
       when: rds_backup_enabled
 
     - name: Create databases
-      alibaba.alicloud.ali_rds_database:
+      stevefulme1.alibaba_cloud.ali_rds_database:
         db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
         db_name: "{{ item.name }}"
         character_set_name: "{{ item.character_set | default('utf8mb4') }}"
@@ -53,7 +53,7 @@
       when: rds_databases | length > 0
 
     - name: Create database accounts
-      alibaba.alicloud.ali_rds_account:
+      stevefulme1.alibaba_cloud.ali_rds_account:
         db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
         account_name: "{{ item.name }}"
         account_password: "{{ item.password }}"
@@ -68,7 +68,7 @@
       no_log: true
 
     - name: Set instance parameters
-      alibaba.alicloud.ali_rds_instance:
+      stevefulme1.alibaba_cloud.ali_rds_instance:
         db_instance_id: "{{ _rds_instance.instance.db_instance_id }}"
         parameters: "{{ rds_parameters }}"
         region: "{{ rds_region }}"
