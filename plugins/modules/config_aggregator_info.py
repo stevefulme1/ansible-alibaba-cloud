@@ -24,7 +24,17 @@ extends_documentation_fragment:
 options:
   aggregator_name:
     description: Filter by aggregator name.
-    type: str"""
+    type: str  limit:
+    description:
+      - Maximum number of results to return.
+    type: int
+    default: 100
+  offset:
+    description:
+      - Number of results to skip for pagination.
+    type: int
+    default: 0
+"""
 
 EXAMPLES = r"""
 - name: Query Cloud Config aggregators.
@@ -52,6 +62,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
+        limit=dict(type='int', default=100),
+        offset=dict(type='int', default=0),
         aggregator_name=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)

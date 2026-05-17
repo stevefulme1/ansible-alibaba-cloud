@@ -28,7 +28,17 @@ options:
     required: true
   tag_key:
     description: Filter by tag key.
-    type: str"""
+    type: str  limit:
+    description:
+      - Maximum number of results to return.
+    type: int
+    default: 100
+  offset:
+    description:
+      - Number of results to skip for pagination.
+    type: int
+    default: 0
+"""
 
 EXAMPLES = r"""
 - name: Query resources by tag.
@@ -56,6 +66,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
+        limit=dict(type='int', default=100),
+        offset=dict(type='int', default=0),
         resource_type=dict(type="str", required=True),
         tag_key=dict(type="str", no_log=False),
     )

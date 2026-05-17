@@ -28,6 +28,16 @@ options:
   dataset_id:
     description: Filter by dataset ID.
     type: str
+  limit:
+    description:
+      - Maximum number of results to return.
+    type: int
+    default: 100
+  offset:
+    description:
+      - Number of results to skip for pagination.
+    type: int
+    default: 0
 """
 
 EXAMPLES = r"""
@@ -56,6 +66,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
+        limit=dict(type='int', default=100),
+        offset=dict(type='int', default=0),
         workspace_id=dict(type="str", required=True),
         dataset_id=dict(type="str"),
     )
