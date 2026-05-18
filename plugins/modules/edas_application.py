@@ -102,22 +102,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("app_name") is not None:
-        params["AppName"] = module.params["app_name"]
-    if module.params.get("app_id") is not None:
-        params["AppId"] = module.params["app_id"]
-    if module.params.get("cluster_id") is not None:
-        params["ClusterId"] = module.params["cluster_id"]
-    if module.params.get("package_type") is not None:
-        params["PackageType"] = module.params["package_type"]
-    if module.params.get("description") is not None:
-        params["Description"] = module.params["description"]
-
     try:
         existing = client.get(
             "DescribeApplication",
-            params,
+            {},
             service_endpoint="edas.{region_id}.aliyuncs.com",
             api_version="2017-08-01",
         )
@@ -134,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "InsertApplication",
-                    params,
+                    {},
                     service_endpoint="edas.{region_id}.aliyuncs.com",
                     api_version="2017-08-01",
                 )
@@ -151,7 +139,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteApplication",
-                    params,
+                    {},
                     service_endpoint="edas.{region_id}.aliyuncs.com",
                     api_version="2017-08-01",
                 )

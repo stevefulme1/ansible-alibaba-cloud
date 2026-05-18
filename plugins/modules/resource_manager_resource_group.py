@@ -94,18 +94,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("display_name") is not None:
-        params["DisplayName"] = module.params["display_name"]
-    if module.params.get("resource_group_name") is not None:
-        params["ResourceGroupName"] = module.params["resource_group_name"]
-    if module.params.get("resource_group_id") is not None:
-        params["ResourceGroupId"] = module.params["resource_group_id"]
-
     try:
         existing = client.get(
             "DescribeResourceGroup",
-            params,
+            {},
             service_endpoint="resourcemanager.aliyuncs.com",
             api_version="2020-03-31",
         )
@@ -122,12 +114,14 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateResourceGroup",
-                    params,
+                    {},
                     service_endpoint="resourcemanager.aliyuncs.com",
                     api_version="2020-03-31",
                 )
                 changed = True
-                module.exit_json(changed=changed, resource_manager_resource_group=result)
+                module.exit_json(
+                    changed=changed, resource_manager_resource_group=result
+                )
             else:
                 module.exit_json(
                     changed=False,
@@ -139,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteResourceGroup",
-                    params,
+                    {},
                     service_endpoint="resourcemanager.aliyuncs.com",
                     api_version="2020-03-31",
                 )

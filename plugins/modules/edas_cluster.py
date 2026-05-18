@@ -98,20 +98,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("cluster_name") is not None:
-        params["ClusterName"] = module.params["cluster_name"]
-    if module.params.get("cluster_id") is not None:
-        params["ClusterId"] = module.params["cluster_id"]
-    if module.params.get("cluster_type") is not None:
-        params["ClusterType"] = module.params["cluster_type"]
-    if module.params.get("network_mode") is not None:
-        params["NetworkMode"] = module.params["network_mode"]
-
     try:
         existing = client.get(
             "DescribeCluster",
-            params,
+            {},
             service_endpoint="edas.{region_id}.aliyuncs.com",
             api_version="2017-08-01",
         )
@@ -128,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "InsertCluster",
-                    params,
+                    {},
                     service_endpoint="edas.{region_id}.aliyuncs.com",
                     api_version="2017-08-01",
                 )
@@ -145,7 +135,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteCluster",
-                    params,
+                    {},
                     service_endpoint="edas.{region_id}.aliyuncs.com",
                     api_version="2017-08-01",
                 )

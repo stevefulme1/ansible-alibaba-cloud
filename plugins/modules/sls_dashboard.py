@@ -98,20 +98,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("project_name") is not None:
-        params["ProjectName"] = module.params["project_name"]
-    if module.params.get("dashboard_name") is not None:
-        params["DashboardName"] = module.params["dashboard_name"]
-    if module.params.get("display_name") is not None:
-        params["DisplayName"] = module.params["display_name"]
-    if module.params.get("description") is not None:
-        params["Description"] = module.params["description"]
-
     try:
         existing = client.get(
             "DescribeDashboard",
-            params,
+            {},
             service_endpoint="sls.{region_id}.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -128,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDashboard",
-                    params,
+                    {},
                     service_endpoint="sls.{region_id}.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -145,7 +135,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDashboard",
-                    params,
+                    {},
                     service_endpoint="sls.{region_id}.aliyuncs.com",
                     api_version="2020-12-30",
                 )

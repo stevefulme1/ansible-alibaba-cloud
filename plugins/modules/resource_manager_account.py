@@ -98,20 +98,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("display_name") is not None:
-        params["DisplayName"] = module.params["display_name"]
-    if module.params.get("account_id") is not None:
-        params["AccountId"] = module.params["account_id"]
-    if module.params.get("folder_id") is not None:
-        params["FolderId"] = module.params["folder_id"]
-    if module.params.get("payer_account_id") is not None:
-        params["PayerAccountId"] = module.params["payer_account_id"]
-
     try:
         existing = client.get(
             "DescribeResourceAccount",
-            params,
+            {},
             service_endpoint="resourcemanager.aliyuncs.com",
             api_version="2020-03-31",
         )
@@ -128,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateResourceAccount",
-                    params,
+                    {},
                     service_endpoint="resourcemanager.aliyuncs.com",
                     api_version="2020-03-31",
                 )
@@ -145,7 +135,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteResourceAccount",
-                    params,
+                    {},
                     service_endpoint="resourcemanager.aliyuncs.com",
                     api_version="2020-03-31",
                 )

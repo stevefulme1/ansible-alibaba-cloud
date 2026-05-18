@@ -95,18 +95,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("uid") is not None:
-        params["Uid"] = module.params["uid"]
-    if module.params.get("user_nick") is not None:
-        params["UserNick"] = module.params["user_nick"]
-    if module.params.get("role_names") is not None:
-        params["RoleNames"] = module.params["role_names"]
-
     try:
         existing = client.get(
             "DescribeUser",
-            params,
+            {},
             service_endpoint="dms-enterprise.aliyuncs.com",
             api_version="2018-11-01",
         )
@@ -123,7 +115,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "RegisterUser",
-                    params,
+                    {},
                     service_endpoint="dms-enterprise.aliyuncs.com",
                     api_version="2018-11-01",
                 )
@@ -140,7 +132,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteUser",
-                    params,
+                    {},
                     service_endpoint="dms-enterprise.aliyuncs.com",
                     api_version="2018-11-01",
                 )

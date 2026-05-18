@@ -132,7 +132,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 api_version="2014-05-26",
             )
         except AlibabaCloudError as exc:
-            raise AnsibleError("Failed to list instances in %s: %s" % (region_id, str(exc)))
+            raise AnsibleError(
+                "Failed to list instances in %s: %s" % (region_id, str(exc))
+            )
 
         data = result.get("Instances", {}).get("Instance", [])
         if not isinstance(data, list):
@@ -198,8 +200,12 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             # Support constructed features.
             strict = self.get_option("strict")
-            self._set_composite_vars(self.get_option("compose"), hostvars, hostname, strict=strict)
-            self._add_host_to_composed_groups(self.get_option("groups"), hostvars, hostname, strict=strict)
+            self._set_composite_vars(
+                self.get_option("compose"), hostvars, hostname, strict=strict
+            )
+            self._add_host_to_composed_groups(
+                self.get_option("groups"), hostvars, hostname, strict=strict
+            )
             self._add_host_to_keyed_groups(
                 self.get_option("keyed_groups"),
                 hostvars,

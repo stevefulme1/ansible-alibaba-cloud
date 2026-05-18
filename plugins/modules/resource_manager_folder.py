@@ -94,18 +94,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("folder_name") is not None:
-        params["FolderName"] = module.params["folder_name"]
-    if module.params.get("folder_id") is not None:
-        params["FolderId"] = module.params["folder_id"]
-    if module.params.get("parent_folder_id") is not None:
-        params["ParentFolderId"] = module.params["parent_folder_id"]
-
     try:
         existing = client.get(
             "DescribeFolder",
-            params,
+            {},
             service_endpoint="resourcemanager.aliyuncs.com",
             api_version="2020-03-31",
         )
@@ -122,7 +114,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateFolder",
-                    params,
+                    {},
                     service_endpoint="resourcemanager.aliyuncs.com",
                     api_version="2020-03-31",
                 )
@@ -139,7 +131,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteFolder",
-                    params,
+                    {},
                     service_endpoint="resourcemanager.aliyuncs.com",
                     api_version="2020-03-31",
                 )

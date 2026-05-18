@@ -21,17 +21,7 @@ version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
-options:
-    limit:
-      description:
-        - Maximum number of results to return.
-      type: int
-      default: 100
-    offset:
-      description:
-        - Number of results to skip for pagination.
-      type: int
-      default: 0
+options: {}
 """
 
 EXAMPLES = r"""
@@ -59,10 +49,7 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 
 def main():
-    spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-    )
+    spec = dict()
     spec.update(alibaba_argument_spec)
 
     module = AnsibleModule(

@@ -106,14 +106,16 @@ def _sign_request(params, access_key_secret, method="GET"):
     h = hmac.new(
         (access_key_secret + "&").encode("utf-8"),
         string_to_sign.encode("utf-8"),
-        hashlib.sha256,
+        hashlib.sha1,
     )
     import base64
 
     return base64.b64encode(h.digest()).decode("utf-8")
 
 
-def _call_actiontrail(access_key_id, access_key_secret, region_id, start_time, end_time):
+def _call_actiontrail(
+    access_key_id, access_key_secret, region_id, start_time, end_time
+):
     """Call ActionTrail LookupEvents API."""
     endpoint = "actiontrail.%s.aliyuncs.com" % region_id
     params = {
@@ -121,7 +123,7 @@ def _call_actiontrail(access_key_id, access_key_secret, region_id, start_time, e
         "Version": "2020-07-06",
         "Format": "JSON",
         "AccessKeyId": access_key_id,
-        "SignatureMethod": "HMAC-SHA256",
+        "SignatureMethod": "HMAC-SHA1",
         "SignatureVersion": "1.0",
         "SignatureNonce": str(uuid.uuid4()),
         "Timestamp": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),

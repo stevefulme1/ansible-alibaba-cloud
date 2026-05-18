@@ -106,24 +106,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("project_name") is not None:
-        params["ProjectName"] = module.params["project_name"]
-    if module.params.get("alert_name") is not None:
-        params["AlertName"] = module.params["alert_name"]
-    if module.params.get("alert_display_name") is not None:
-        params["AlertDisplayName"] = module.params["alert_display_name"]
-    if module.params.get("schedule_interval") is not None:
-        params["ScheduleInterval"] = module.params["schedule_interval"]
-    if module.params.get("condition") is not None:
-        params["Condition"] = module.params["condition"]
-    if module.params.get("dashboard") is not None:
-        params["Dashboard"] = module.params["dashboard"]
-
     try:
         existing = client.get(
             "DescribeAlert",
-            params,
+            {},
             service_endpoint="sls.{region_id}.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -140,7 +126,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAlert",
-                    params,
+                    {},
                     service_endpoint="sls.{region_id}.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -157,7 +143,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAlert",
-                    params,
+                    {},
                     service_endpoint="sls.{region_id}.aliyuncs.com",
                     api_version="2020-12-30",
                 )

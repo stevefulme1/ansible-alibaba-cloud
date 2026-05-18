@@ -106,24 +106,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_source") is not None:
-        params["InstanceSource"] = module.params["instance_source"]
-    if module.params.get("database_type") is not None:
-        params["DatabaseType"] = module.params["database_type"]
-    if module.params.get("host") is not None:
-        params["Host"] = module.params["host"]
-    if module.params.get("port") is not None:
-        params["Port"] = module.params["port"]
-    if module.params.get("sid") is not None:
-        params["Sid"] = module.params["sid"]
-    if module.params.get("instance_id") is not None:
-        params["InstanceId"] = module.params["instance_id"]
-
     try:
         existing = client.get(
             "DescribeInstance",
-            params,
+            {},
             service_endpoint="dms-enterprise.aliyuncs.com",
             api_version="2018-11-01",
         )
@@ -140,7 +126,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "RegisterInstance",
-                    params,
+                    {},
                     service_endpoint="dms-enterprise.aliyuncs.com",
                     api_version="2018-11-01",
                 )
@@ -157,7 +143,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    params,
+                    {},
                     service_endpoint="dms-enterprise.aliyuncs.com",
                     api_version="2018-11-01",
                 )
