@@ -1,0 +1,182 @@
+---
+# extensions/audit/event_query.yml
+# Indirect Node Counting query for stevefulme1.alibaba_cloud
+stevefulme1.alibaba_cloud.ecs_instance:
+  query: >-
+    {
+      name: .ecs_instance.InstanceName,
+      canonical_facts: {
+        uuid: .ecs_instance.InstanceId
+      },
+      facts: {
+        device_type: "virtual_machine"
+      }
+    }
+
+stevefulme1.alibaba_cloud.rds_instance:
+  query: >-
+    {
+      name: .rds_instance.DBInstanceDescription,
+      canonical_facts: {
+        uuid: .rds_instance.DBInstanceId
+      },
+      facts: {
+        device_type: "database_relational"
+      }
+    }
+
+stevefulme1.alibaba_cloud.redis_instance:
+  query: >-
+    {
+      name: .redis_instance.InstanceName,
+      canonical_facts: {
+        uuid: .redis_instance.InstanceId
+      },
+      facts: {
+        device_type: "database_cache"
+      }
+    }
+
+stevefulme1.alibaba_cloud.mongodb_instance:
+  query: >-
+    {
+      name: .mongodb_instance.DBInstanceDescription,
+      canonical_facts: {
+        uuid: .mongodb_instance.DBInstanceId
+      },
+      facts: {
+        device_type: "database_nosql"
+      }
+    }
+
+stevefulme1.alibaba_cloud.polardb_cluster:
+  query: >-
+    {
+      name: .polardb_cluster.DBClusterDescription,
+      canonical_facts: {
+        uuid: .polardb_cluster.DBClusterId
+      },
+      facts: {
+        device_type: "database_relational"
+      }
+    }
+
+stevefulme1.alibaba_cloud.adb_cluster:
+  query: >-
+    {
+      name: .adb_cluster.DBClusterDescription,
+      canonical_facts: {
+        uuid: .adb_cluster.DBClusterId
+      },
+      facts: {
+        device_type: "database_relational"
+      }
+    }
+
+stevefulme1.alibaba_cloud.ecs_dedicated_host:
+  query: >-
+    {
+      name: .dedicated_host.DedicatedHostName,
+      canonical_facts: {
+        uuid: .dedicated_host.DedicatedHostId
+      },
+      facts: {
+        device_type: "bare_metal"
+      }
+    }
+
+stevefulme1.alibaba_cloud.ack_cluster:
+  query: >-
+    {
+      name: .ack_cluster.name,
+      canonical_facts: {
+        uuid: .ack_cluster.cluster_id
+      },
+      facts: {
+        device_type: "container"
+      }
+    }
+
+stevefulme1.alibaba_cloud.ack_node_pool:
+  query: >-
+    {
+      name: .ack_node_pool.nodepool_info.name,
+      canonical_facts: {
+        uuid: .ack_node_pool.nodepool_info.nodepool_id
+      },
+      facts: {
+        device_type: "container"
+      }
+    }
+
+stevefulme1.alibaba_cloud.slb_instance:
+  query: >-
+    {
+      name: .slb_instance.LoadBalancerName,
+      canonical_facts: {
+        uuid: .slb_instance.LoadBalancerId
+      },
+      facts: {
+        device_type: "load_balancer"
+      }
+    }
+
+stevefulme1.alibaba_cloud.nat_gateway:
+  query: >-
+    {
+      name: .nat_gateway.Name,
+      canonical_facts: {
+        uuid: .nat_gateway.NatGatewayId
+      },
+      facts: {
+        device_type: "gateway"
+      }
+    }
+
+stevefulme1.alibaba_cloud.vpn_gateway:
+  query: >-
+    {
+      name: .vpn_gateway.Name,
+      canonical_facts: {
+        uuid: .vpn_gateway.VpnGatewayId
+      },
+      facts: {
+        device_type: "gateway"
+      }
+    }
+
+stevefulme1.alibaba_cloud.fc_function:
+  query: >-
+    {
+      name: .fc_function.functionName,
+      canonical_facts: {
+        uuid: .fc_function.functionId
+      },
+      facts: {
+        device_type: "serverless_function"
+      }
+    }
+
+stevefulme1.alibaba_cloud.eci_container_group:
+  query: >-
+    {
+      name: .eci_container_group.ContainerGroupName,
+      canonical_facts: {
+        uuid: .eci_container_group.ContainerGroupId
+      },
+      facts: {
+        device_type: "container"
+      }
+    }
+
+stevefulme1.alibaba_cloud.elasticsearch_instance:
+  query: >-
+    {
+      name: .elasticsearch_instance.description,
+      canonical_facts: {
+        uuid: .elasticsearch_instance.instanceId
+      },
+      facts: {
+        device_type: "database_nosql"
+      }
+    }
