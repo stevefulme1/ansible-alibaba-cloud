@@ -106,24 +106,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("group_id") is not None:
-        params["GroupId"] = module.params["group_id"]
-    if module.params.get("api_name") is not None:
-        params["ApiName"] = module.params["api_name"]
-    if module.params.get("api_id") is not None:
-        params["ApiId"] = module.params["api_id"]
-    if module.params.get("visibility") is not None:
-        params["Visibility"] = module.params["visibility"]
-    if module.params.get("request_config") is not None:
-        params["RequestConfig"] = module.params["request_config"]
-    if module.params.get("service_config") is not None:
-        params["ServiceConfig"] = module.params["service_config"]
-
     try:
         existing = client.get(
             "DescribeApis",
-            params,
+            {},
             service_endpoint="apigateway.aliyuncs.com",
             api_version="2016-07-14",
         )
@@ -140,7 +126,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateApi",
-                    params,
+                    {},
                     service_endpoint="apigateway.aliyuncs.com",
                     api_version="2016-07-14",
                 )
@@ -154,7 +140,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteApi",
-                    params,
+                    {},
                     service_endpoint="apigateway.aliyuncs.com",
                     api_version="2016-07-14",
                 )

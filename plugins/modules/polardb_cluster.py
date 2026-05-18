@@ -82,7 +82,9 @@ def main():
     spec = dict(
         state=dict(type="str", choices=["present", "absent"], default="present"),
         db_cluster_id=dict(type="str"),
-        db_type=dict(type="str", choices=["MySQL", "PostgreSQL", "Oracle"], default="MySQL"),
+        db_type=dict(
+            type="str", choices=["MySQL", "PostgreSQL", "Oracle"], default="MySQL"
+        ),
         db_version=dict(type="str"),
         pay_type=dict(type="str", choices=["Postpaid", "Prepaid"], default="Postpaid"),
         db_node_class=dict(type="str"),
@@ -106,24 +108,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_cluster_id") is not None:
-        params["DBClusterId"] = module.params["db_cluster_id"]
-    if module.params.get("db_type") is not None:
-        params["DBType"] = module.params["db_type"]
-    if module.params.get("db_version") is not None:
-        params["DBVersion"] = module.params["db_version"]
-    if module.params.get("pay_type") is not None:
-        params["PayType"] = module.params["pay_type"]
-    if module.params.get("db_node_class") is not None:
-        params["DBNodeClass"] = module.params["db_node_class"]
-    if module.params.get("cluster_description") is not None:
-        params["ClusterDescription"] = module.params["cluster_description"]
-
     try:
         existing = client.get(
             "DescribeDBClusters",
-            params,
+            {},
             service_endpoint="polardb.aliyuncs.com",
             api_version="2017-08-01",
         )
@@ -140,7 +128,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDBCluster",
-                    params,
+                    {},
                     service_endpoint="polardb.aliyuncs.com",
                     api_version="2017-08-01",
                 )
@@ -154,7 +142,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDBCluster",
-                    params,
+                    {},
                     service_endpoint="polardb.aliyuncs.com",
                     api_version="2017-08-01",
                 )

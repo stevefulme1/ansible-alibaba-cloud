@@ -107,22 +107,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("service_name") is not None:
-        params["ServiceName"] = module.params["service_name"]
-    if module.params.get("function_name") is not None:
-        params["FunctionName"] = module.params["function_name"]
-    if module.params.get("runtime") is not None:
-        params["Runtime"] = module.params["runtime"]
-    if module.params.get("handler") is not None:
-        params["Handler"] = module.params["handler"]
-    if module.params.get("memory_size") is not None:
-        params["MemorySize"] = module.params["memory_size"]
-
     try:
         existing = client.get(
             "ListFunctions",
-            params,
+            {},
             service_endpoint="fc.aliyuncs.com",
             api_version="2021-04-06",
         )
@@ -139,7 +127,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateFunction",
-                    params,
+                    {},
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2021-04-06",
                 )
@@ -153,7 +141,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteFunction",
-                    params,
+                    {},
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2021-04-06",
                 )

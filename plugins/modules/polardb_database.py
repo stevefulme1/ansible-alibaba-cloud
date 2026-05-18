@@ -96,20 +96,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_cluster_id") is not None:
-        params["DBClusterId"] = module.params["db_cluster_id"]
-    if module.params.get("db_name") is not None:
-        params["DBName"] = module.params["db_name"]
-    if module.params.get("character_set_name") is not None:
-        params["CharacterSetName"] = module.params["character_set_name"]
-    if module.params.get("db_description") is not None:
-        params["DBDescription"] = module.params["db_description"]
-
     try:
         existing = client.get(
             "DescribeDatabases",
-            params,
+            {},
             service_endpoint="polardb.aliyuncs.com",
             api_version="2017-08-01",
         )
@@ -126,7 +116,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDatabase",
-                    params,
+                    {},
                     service_endpoint="polardb.aliyuncs.com",
                     api_version="2017-08-01",
                 )
@@ -140,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDatabase",
-                    params,
+                    {},
                     service_endpoint="polardb.aliyuncs.com",
                     api_version="2017-08-01",
                 )
