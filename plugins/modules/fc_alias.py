@@ -93,18 +93,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("service_name") is not None:
-        params["ServiceName"] = module.params["service_name"]
-    if module.params.get("alias_name") is not None:
-        params["AliasName"] = module.params["alias_name"]
-    if module.params.get("version_id") is not None:
-        params["VersionId"] = module.params["version_id"]
-
     try:
         result = client.get(
             "ListAliases",
-            params,
+            {},
             service_endpoint="fc.aliyuncs.com",
             api_version="2016-08-15",
         )
@@ -121,7 +113,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAlias",
-                    params,
+                    {},
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2016-08-15",
                 )
@@ -138,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAlias",
-                    params,
+                    {},
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2016-08-15",
                 )

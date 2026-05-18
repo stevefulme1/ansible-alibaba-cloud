@@ -93,18 +93,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("command_id") is not None:
-        params["CommandId"] = module.params["command_id"]
-    if module.params.get("instance_ids") is not None:
-        params["InstanceIds"] = module.params["instance_ids"]
-    if module.params.get("invoke_id") is not None:
-        params["InvokeId"] = module.params["invoke_id"]
-
     try:
         result = client.get(
             "DescribeInvocations",
-            params,
+            {},
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -121,7 +113,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "InvokeCommand",
-                    params,
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -138,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "StopInvocation",
-                    params,
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )

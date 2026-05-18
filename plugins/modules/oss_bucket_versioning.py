@@ -89,16 +89,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("bucket_name") is not None:
-        params["BucketName"] = module.params["bucket_name"]
-    if module.params.get("versioning_status") is not None:
-        params["VersioningStatus"] = module.params["versioning_status"]
-
     try:
         result = client.get(
             "GetBucketVersioning",
-            params,
+            {},
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -115,7 +109,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketVersioning",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -132,7 +126,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "PutBucketVersioning",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

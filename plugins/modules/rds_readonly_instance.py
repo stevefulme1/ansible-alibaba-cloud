@@ -101,22 +101,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("db_instance_class") is not None:
-        params["DBInstanceClass"] = module.params["db_instance_class"]
-    if module.params.get("db_instance_storage") is not None:
-        params["DBInstanceStorage"] = module.params["db_instance_storage"]
-    if module.params.get("engine_version") is not None:
-        params["EngineVersion"] = module.params["engine_version"]
-    if module.params.get("zone_id") is not None:
-        params["ZoneId"] = module.params["zone_id"]
-
     try:
         result = client.get(
             "DescribeDBInstances",
-            params,
+            {},
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -133,7 +121,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateReadOnlyDBInstance",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
@@ -150,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDBInstance",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

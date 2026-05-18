@@ -97,20 +97,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("bucket_name") is not None:
-        params["BucketName"] = module.params["bucket_name"]
-    if module.params.get("inventory_id") is not None:
-        params["InventoryId"] = module.params["inventory_id"]
-    if module.params.get("destination_bucket") is not None:
-        params["DestinationBucket"] = module.params["destination_bucket"]
-    if module.params.get("schedule") is not None:
-        params["Schedule"] = module.params["schedule"]
-
     try:
         result = client.get(
             "ListBucketInventory",
-            params,
+            {},
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -127,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketInventory",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -144,7 +134,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketInventory",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

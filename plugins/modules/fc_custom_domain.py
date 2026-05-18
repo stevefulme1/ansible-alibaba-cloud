@@ -89,16 +89,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("domain_name") is not None:
-        params["DomainName"] = module.params["domain_name"]
-    if module.params.get("protocol") is not None:
-        params["Protocol"] = module.params["protocol"]
-
     try:
         result = client.get(
             "ListCustomDomains",
-            params,
+            {},
             service_endpoint="fc.aliyuncs.com",
             api_version="2016-08-15",
         )
@@ -115,7 +109,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateCustomDomain",
-                    params,
+                    {},
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2016-08-15",
                 )
@@ -132,7 +126,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteCustomDomain",
-                    params,
+                    {},
                     service_endpoint="fc.aliyuncs.com",
                     api_version="2016-08-15",
                 )

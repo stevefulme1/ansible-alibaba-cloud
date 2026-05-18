@@ -93,18 +93,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_name") is not None:
-        params["InstanceName"] = module.params["instance_name"]
-    if module.params.get("instance_type") is not None:
-        params["InstanceType"] = module.params["instance_type"]
-    if module.params.get("instance_id") is not None:
-        params["InstanceId"] = module.params["instance_id"]
-
     try:
         result = client.get(
             "ListInstance",
-            params,
+            {},
             service_endpoint="cr.aliyuncs.com",
             api_version="2018-12-01",
         )
@@ -121,7 +113,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateInstance",
-                    params,
+                    {},
                     service_endpoint="cr.aliyuncs.com",
                     api_version="2018-12-01",
                 )
@@ -138,7 +130,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    params,
+                    {},
                     service_endpoint="cr.aliyuncs.com",
                     api_version="2018-12-01",
                 )

@@ -97,20 +97,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("launch_template_name") is not None:
-        params["LaunchTemplateName"] = module.params["launch_template_name"]
-    if module.params.get("instance_type") is not None:
-        params["InstanceType"] = module.params["instance_type"]
-    if module.params.get("image_id") is not None:
-        params["ImageId"] = module.params["image_id"]
-    if module.params.get("launch_template_id") is not None:
-        params["LaunchTemplateId"] = module.params["launch_template_id"]
-
     try:
         result = client.get(
             "DescribeLaunchTemplates",
-            params,
+            {},
             service_endpoint="ecs.aliyuncs.com",
             api_version="2014-05-26",
         )
@@ -127,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateLaunchTemplate",
-                    params,
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
@@ -144,7 +134,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteLaunchTemplate",
-                    params,
+                    {},
                     service_endpoint="ecs.aliyuncs.com",
                     api_version="2014-05-26",
                 )
