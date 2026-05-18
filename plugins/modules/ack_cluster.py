@@ -101,25 +101,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("cluster_id") is not None:
-        params["ClusterId"] = module.params["cluster_id"]
-    if module.params.get("name") is not None:
-        params["Name"] = module.params["name"]
-    if module.params.get("cluster_type") is not None:
-        params["ClusterType"] = module.params["cluster_type"]
-    if module.params.get("kubernetes_version") is not None:
-        params["KubernetesVersion"] = module.params["kubernetes_version"]
-    if module.params.get("vpcid") is not None:
-        params["VpcId"] = module.params["vpcid"]
-    if module.params.get("vswitch_ids") is not None:
-        params["VSwitchIds"] = module.params["vswitch_ids"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeClustersV1",
-            params,
+            {},
             service_endpoint="cs.aliyuncs.com",
             api_version="2015-12-15",
         )
@@ -136,7 +122,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateCluster",
-                    params,
+                    {},
                     service_endpoint="cs.aliyuncs.com",
                     api_version="2015-12-15",
                 )
@@ -157,7 +143,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteCluster",
-                    params,
+                    {},
                     service_endpoint="cs.aliyuncs.com",
                     api_version="2015-12-15",
                 )

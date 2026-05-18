@@ -91,21 +91,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("project_name") is not None:
-        params["ProjectName"] = module.params["project_name"]
-    if module.params.get("logstore_name") is not None:
-        params["LogstoreName"] = module.params["logstore_name"]
-    if module.params.get("ttl") is not None:
-        params["TTL"] = module.params["ttl"]
-    if module.params.get("shard_count") is not None:
-        params["ShardCount"] = module.params["shard_count"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetLogStore",
-            params,
+            {},
             service_endpoint="sls.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -122,7 +112,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateLogStore",
-                    params,
+                    {},
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -143,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteLogStore",
-                    params,
+                    {},
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )

@@ -60,8 +60,6 @@ oss_bucket_cors:
   type: dict
 """
 
-import json
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_cloud import (
     AlibabaCloudClient,
@@ -96,21 +94,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("bucket_name") is not None:
-        params["BucketName"] = module.params["bucket_name"]
-    if module.params.get("allowed_origins") is not None:
-        params["AllowedOrigins"] = json.dumps(module.params["allowed_origins"])
-    if module.params.get("allowed_methods") is not None:
-        params["AllowedMethods"] = json.dumps(module.params["allowed_methods"])
-    if module.params.get("allowed_headers") is not None:
-        params["AllowedHeaders"] = json.dumps(module.params["allowed_headers"])
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetBucketCors",
-            params,
+            {},
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -127,7 +115,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketCors",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -148,7 +136,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketCors",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

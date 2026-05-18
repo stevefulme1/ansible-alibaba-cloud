@@ -96,23 +96,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("account_name") is not None:
-        params["AccountName"] = module.params["account_name"]
-    if module.params.get("account_password") is not None:
-        params["AccountPassword"] = module.params["account_password"]
-    if module.params.get("account_type") is not None:
-        params["AccountType"] = module.params["account_type"]
-    if module.params.get("account_description") is not None:
-        params["AccountDescription"] = module.params["account_description"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeAccounts",
-            params,
+            {},
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -129,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateAccount",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
@@ -150,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteAccount",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

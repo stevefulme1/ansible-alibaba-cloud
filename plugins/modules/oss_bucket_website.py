@@ -87,19 +87,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("bucket_name") is not None:
-        params["BucketName"] = module.params["bucket_name"]
-    if module.params.get("index_document") is not None:
-        params["IndexDocument"] = module.params["index_document"]
-    if module.params.get("error_document") is not None:
-        params["ErrorDocument"] = module.params["error_document"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetBucketWebsite",
-            params,
+            {},
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -116,7 +108,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketWebsite",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -137,7 +129,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketWebsite",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

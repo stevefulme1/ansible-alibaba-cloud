@@ -93,21 +93,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("domain_name") is not None:
-        params["DomainName"] = module.params["domain_name"]
-    if module.params.get("cdn_type") is not None:
-        params["CdnType"] = module.params["cdn_type"]
-    if module.params.get("sources") is not None:
-        params["Sources"] = module.params["sources"]
-    if module.params.get("source_type") is not None:
-        params["SourceType"] = module.params["source_type"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeUserDomains",
-            params,
+            {},
             service_endpoint="cdn.aliyuncs.com",
             api_version="2018-05-10",
         )
@@ -124,7 +114,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AddCdnDomain",
-                    params,
+                    {},
                     service_endpoint="cdn.aliyuncs.com",
                     api_version="2018-05-10",
                 )
@@ -145,7 +135,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteCdnDomain",
-                    params,
+                    {},
                     service_endpoint="cdn.aliyuncs.com",
                     api_version="2018-05-10",
                 )

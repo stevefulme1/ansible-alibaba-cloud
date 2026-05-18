@@ -82,19 +82,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("domain_name") is not None:
-        params["DomainName"] = module.params["domain_name"]
-    if module.params.get("function_name") is not None:
-        params["FunctionName"] = module.params["function_name"]
-    if module.params.get("function_args") is not None:
-        params["FunctionArgs"] = module.params["function_args"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeCdnDomainConfigs",
-            params,
+            {},
             service_endpoint="cdn.aliyuncs.com",
             api_version="2018-05-10",
         )
@@ -111,7 +103,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "BatchSetCdnDomainConfig",
-                    params,
+                    {},
                     service_endpoint="cdn.aliyuncs.com",
                     api_version="2018-05-10",
                 )

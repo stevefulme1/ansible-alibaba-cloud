@@ -96,23 +96,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("name") is not None:
-        params["Name"] = module.params["name"]
-    if module.params.get("oss_bucket_name") is not None:
-        params["OssBucketName"] = module.params["oss_bucket_name"]
-    if module.params.get("oss_key_prefix") is not None:
-        params["OssKeyPrefix"] = module.params["oss_key_prefix"]
-    if module.params.get("sls_project_arn") is not None:
-        params["SlsProjectArn"] = module.params["sls_project_arn"]
-    if module.params.get("trail_region") is not None:
-        params["TrailRegion"] = module.params["trail_region"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeTrails",
-            params,
+            {},
             service_endpoint="actiontrail.aliyuncs.com",
             api_version="2020-07-06",
         )
@@ -129,7 +117,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateTrail",
-                    params,
+                    {},
                     service_endpoint="actiontrail.aliyuncs.com",
                     api_version="2020-07-06",
                 )
@@ -150,7 +138,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteTrail",
-                    params,
+                    {},
                     service_endpoint="actiontrail.aliyuncs.com",
                     api_version="2020-07-06",
                 )

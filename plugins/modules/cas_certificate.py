@@ -91,21 +91,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("certificate_id") is not None:
-        params["CertificateId"] = module.params["certificate_id"]
-    if module.params.get("name") is not None:
-        params["Name"] = module.params["name"]
-    if module.params.get("cert") is not None:
-        params["Cert"] = module.params["cert"]
-    if module.params.get("certificate_key") is not None:
-        params["CertificateKey"] = module.params["certificate_key"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListUserCertificateOrder",
-            params,
+            {},
             service_endpoint="cas.aliyuncs.com",
             api_version="2020-04-07",
         )
@@ -122,7 +112,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "UploadUserCertificate",
-                    params,
+                    {},
                     service_endpoint="cas.aliyuncs.com",
                     api_version="2020-04-07",
                 )
@@ -143,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteUserCertificate",
-                    params,
+                    {},
                     service_endpoint="cas.aliyuncs.com",
                     api_version="2020-04-07",
                 )

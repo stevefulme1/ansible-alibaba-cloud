@@ -91,21 +91,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("bucket_name") is not None:
-        params["BucketName"] = module.params["bucket_name"]
-    if module.params.get("rule_id") is not None:
-        params["RuleId"] = module.params["rule_id"]
-    if module.params.get("prefix") is not None:
-        params["Prefix"] = module.params["prefix"]
-    if module.params.get("expiration_days") is not None:
-        params["ExpirationDays"] = module.params["expiration_days"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetBucketLifecycle",
-            params,
+            {},
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -122,7 +112,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucketLifecycle",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -143,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucketLifecycle",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

@@ -78,17 +78,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("backup_method") is not None:
-        params["BackupMethod"] = module.params["backup_method"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeBackups",
-            params,
+            {},
             service_endpoint="mongodb.aliyuncs.com",
             api_version="2015-12-01",
         )
@@ -105,7 +99,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateBackup",
-                    params,
+                    {},
                     service_endpoint="mongodb.aliyuncs.com",
                     api_version="2015-12-01",
                 )

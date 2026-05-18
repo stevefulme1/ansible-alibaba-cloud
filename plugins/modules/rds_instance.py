@@ -80,7 +80,9 @@ def main():
     spec = dict(
         state=dict(type="str", choices=["present", "absent"], default="present"),
         db_instance_id=dict(type="str"),
-        engine=dict(type="str", choices=["MySQL", "SQLServer", "PostgreSQL", "MariaDB"]),
+        engine=dict(
+            type="str", choices=["MySQL", "SQLServer", "PostgreSQL", "MariaDB"]
+        ),
         engine_version=dict(type="str"),
         db_instance_class=dict(type="str"),
         db_instance_storage=dict(type="int"),
@@ -105,27 +107,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("engine") is not None:
-        params["Engine"] = module.params["engine"]
-    if module.params.get("engine_version") is not None:
-        params["EngineVersion"] = module.params["engine_version"]
-    if module.params.get("db_instance_class") is not None:
-        params["DBInstanceClass"] = module.params["db_instance_class"]
-    if module.params.get("db_instance_storage") is not None:
-        params["DBInstanceStorage"] = module.params["db_instance_storage"]
-    if module.params.get("db_instance_description") is not None:
-        params["DBInstanceDescription"] = module.params["db_instance_description"]
-    if module.params.get("pay_type") is not None:
-        params["PayType"] = module.params["pay_type"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDBInstances",
-            params,
+            {},
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -142,7 +128,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDBInstance",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
@@ -163,7 +149,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDBInstance",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

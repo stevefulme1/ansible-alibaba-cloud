@@ -91,21 +91,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("db_name") is not None:
-        params["DBName"] = module.params["db_name"]
-    if module.params.get("character_set_name") is not None:
-        params["CharacterSetName"] = module.params["character_set_name"]
-    if module.params.get("db_description") is not None:
-        params["DBDescription"] = module.params["db_description"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDatabases",
-            params,
+            {},
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -122,7 +112,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateDatabase",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
@@ -143,7 +133,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDatabase",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

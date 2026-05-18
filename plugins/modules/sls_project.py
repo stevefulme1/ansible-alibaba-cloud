@@ -83,17 +83,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("project_name") is not None:
-        params["ProjectName"] = module.params["project_name"]
-    if module.params.get("description") is not None:
-        params["Description"] = module.params["description"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "GetProject",
-            params,
+            {},
             service_endpoint="sls.aliyuncs.com",
             api_version="2020-12-30",
         )
@@ -110,7 +104,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateProject",
-                    params,
+                    {},
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )
@@ -131,7 +125,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteProject",
-                    params,
+                    {},
                     service_endpoint="sls.aliyuncs.com",
                     api_version="2020-12-30",
                 )

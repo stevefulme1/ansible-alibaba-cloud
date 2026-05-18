@@ -89,19 +89,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("bucket_name") is not None:
-        params["BucketName"] = module.params["bucket_name"]
-    if module.params.get("storage_class") is not None:
-        params["StorageClass"] = module.params["storage_class"]
-    if module.params.get("acl") is not None:
-        params["ACL"] = module.params["acl"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "ListBuckets",
-            params,
+            {},
             service_endpoint="oss.aliyuncs.com",
             api_version="2019-05-17",
         )
@@ -118,7 +110,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "PutBucket",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )
@@ -139,7 +131,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBucket",
-                    params,
+                    {},
                     service_endpoint="oss.aliyuncs.com",
                     api_version="2019-05-17",
                 )

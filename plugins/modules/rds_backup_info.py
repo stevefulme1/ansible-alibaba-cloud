@@ -24,16 +24,6 @@ options:
   db_instance_id:
     description: RDS instance ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
 """
 
 EXAMPLES = r"""
@@ -62,8 +52,6 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
         db_instance_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
@@ -82,8 +70,6 @@ def main():
     )
 
     params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
     try:
         result = client.get(
             "DescribeBackups",

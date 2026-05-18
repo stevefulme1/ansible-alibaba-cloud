@@ -82,19 +82,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("security_ips") is not None:
-        params["SecurityIps"] = module.params["security_ips"]
-    if module.params.get("whitelist_network_type") is not None:
-        params["WhitelistNetworkType"] = module.params["whitelist_network_type"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeDBInstanceIPArrayList",
-            params,
+            {},
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -111,7 +103,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "ModifySecurityIps",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

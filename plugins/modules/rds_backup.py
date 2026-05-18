@@ -93,21 +93,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("db_instance_id") is not None:
-        params["DBInstanceId"] = module.params["db_instance_id"]
-    if module.params.get("backup_id") is not None:
-        params["BackupId"] = module.params["backup_id"]
-    if module.params.get("backup_method") is not None:
-        params["BackupMethod"] = module.params["backup_method"]
-    if module.params.get("backup_type") is not None:
-        params["BackupType"] = module.params["backup_type"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeBackups",
-            params,
+            {},
             service_endpoint="rds.aliyuncs.com",
             api_version="2014-08-15",
         )
@@ -124,7 +114,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateBackup",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )
@@ -145,7 +135,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteBackup",
-                    params,
+                    {},
                     service_endpoint="rds.aliyuncs.com",
                     api_version="2014-08-15",
                 )

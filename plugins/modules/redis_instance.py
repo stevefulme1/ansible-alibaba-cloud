@@ -100,25 +100,11 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_id") is not None:
-        params["InstanceId"] = module.params["instance_id"]
-    if module.params.get("instance_name") is not None:
-        params["InstanceName"] = module.params["instance_name"]
-    if module.params.get("instance_class") is not None:
-        params["InstanceClass"] = module.params["instance_class"]
-    if module.params.get("engine_version") is not None:
-        params["EngineVersion"] = module.params["engine_version"]
-    if module.params.get("instance_type") is not None:
-        params["InstanceType"] = module.params["instance_type"]
-    if module.params.get("password") is not None:
-        params["Password"] = module.params["password"]
-
     try:
         # Describe existing resources to check idempotency.
         existing = client.get(
             "DescribeInstances",
-            params,
+            {},
             service_endpoint="r-kvstore.aliyuncs.com",
             api_version="2015-01-01",
         )
@@ -135,7 +121,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateInstance",
-                    params,
+                    {},
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )
@@ -156,7 +142,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    params,
+                    {},
                     service_endpoint="r-kvstore.aliyuncs.com",
                     api_version="2015-01-01",
                 )
