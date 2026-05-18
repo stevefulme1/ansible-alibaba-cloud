@@ -93,20 +93,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_id") is not None:
-        params["InstanceId"] = module.params["instance_id"]
-    if module.params.get("host_name") is not None:
-        params["HostName"] = module.params["host_name"]
-    if module.params.get("host_private_address") is not None:
-        params["HostPrivateAddress"] = module.params["host_private_address"]
-    if module.params.get("os_type") is not None:
-        params["OsType"] = module.params["os_type"]
-
     try:
         existing = client.get(
             "ListHosts",
-            params,
+            {},
             service_endpoint="yundun-bastionhost.aliyuncs.com",
             api_version="2019-12-09",
         )
@@ -123,7 +113,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateHost",
-                    params,
+                    {},
                     service_endpoint="yundun-bastionhost.aliyuncs.com",
                     api_version="2019-12-09",
                 )
@@ -138,7 +128,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteHost",
-                    params,
+                    {},
                     service_endpoint="yundun-bastionhost.aliyuncs.com",
                     api_version="2019-12-09",
                 )

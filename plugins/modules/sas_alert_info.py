@@ -24,18 +24,7 @@ extends_documentation_fragment:
 options:
   severity:
     description: Filter by severity level.
-    type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
-"""
+    type: str"""
 
 EXAMPLES = r"""
 - name: Query Security Center alerts.
@@ -63,8 +52,6 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
         severity=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)

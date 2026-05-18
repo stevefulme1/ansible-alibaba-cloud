@@ -83,16 +83,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("group_id") is not None:
-        params["GroupId"] = module.params["group_id"]
-    if module.params.get("group_name") is not None:
-        params["GroupName"] = module.params["group_name"]
-
     try:
         existing = client.get(
             "DescribeDomainGroups",
-            params,
+            {},
             service_endpoint="alidns.aliyuncs.com",
             api_version="2015-01-09",
         )
@@ -109,7 +103,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "AddDomainGroup",
-                    params,
+                    {},
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )
@@ -124,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteDomainGroup",
-                    params,
+                    {},
                     service_endpoint="alidns.aliyuncs.com",
                     api_version="2015-01-09",
                 )

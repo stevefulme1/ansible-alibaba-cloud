@@ -89,18 +89,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_name") is not None:
-        params["InstanceName"] = module.params["instance_name"]
-    if module.params.get("table_name") is not None:
-        params["TableName"] = module.params["table_name"]
-    if module.params.get("primary_keys") is not None:
-        params["PrimaryKeys"] = module.params["primary_keys"]
-
     try:
         existing = client.get(
             "ListTable",
-            params,
+            {},
             service_endpoint="ots.aliyuncs.com",
             api_version="2016-06-20",
         )
@@ -117,7 +109,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateTable",
-                    params,
+                    {},
                     service_endpoint="ots.aliyuncs.com",
                     api_version="2016-06-20",
                 )
@@ -132,7 +124,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteTable",
-                    params,
+                    {},
                     service_endpoint="ots.aliyuncs.com",
                     api_version="2016-06-20",
                 )

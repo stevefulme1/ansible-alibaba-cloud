@@ -89,18 +89,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_id") is not None:
-        params["InstanceId"] = module.params["instance_id"]
-    if module.params.get("user_name") is not None:
-        params["UserName"] = module.params["user_name"]
-    if module.params.get("source") is not None:
-        params["Source"] = module.params["source"]
-
     try:
         existing = client.get(
             "ListUsers",
-            params,
+            {},
             service_endpoint="yundun-bastionhost.aliyuncs.com",
             api_version="2019-12-09",
         )
@@ -117,7 +109,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateUser",
-                    params,
+                    {},
                     service_endpoint="yundun-bastionhost.aliyuncs.com",
                     api_version="2019-12-09",
                 )
@@ -132,7 +124,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteUser",
-                    params,
+                    {},
                     service_endpoint="yundun-bastionhost.aliyuncs.com",
                     api_version="2019-12-09",
                 )

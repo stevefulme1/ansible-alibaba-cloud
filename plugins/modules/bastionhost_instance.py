@@ -83,16 +83,10 @@ def main():
     state = module.params["state"]
     changed = False
 
-    params = {}
-    if module.params.get("instance_id") is not None:
-        params["InstanceId"] = module.params["instance_id"]
-    if module.params.get("plan") is not None:
-        params["Plan"] = module.params["plan"]
-
     try:
         existing = client.get(
             "DescribeInstances",
-            params,
+            {},
             service_endpoint="yundun-bastionhost.aliyuncs.com",
             api_version="2019-12-09",
         )
@@ -109,7 +103,7 @@ def main():
                     module.exit_json(changed=True)
                 result = client.get(
                     "CreateInstance",
-                    params,
+                    {},
                     service_endpoint="yundun-bastionhost.aliyuncs.com",
                     api_version="2019-12-09",
                 )
@@ -124,7 +118,7 @@ def main():
                     module.exit_json(changed=True)
                 client.get(
                     "DeleteInstance",
-                    params,
+                    {},
                     service_endpoint="yundun-bastionhost.aliyuncs.com",
                     api_version="2019-12-09",
                 )
