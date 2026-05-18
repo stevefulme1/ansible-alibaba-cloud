@@ -113,9 +113,7 @@ def _sign_request(params, access_key_secret, method="GET"):
     return base64.b64encode(h.digest()).decode("utf-8")
 
 
-def _call_actiontrail(
-    access_key_id, access_key_secret, region_id, start_time, end_time
-):
+def _call_actiontrail(access_key_id, access_key_secret, region_id, start_time, end_time):
     """Call ActionTrail LookupEvents API."""
     endpoint = "actiontrail.%s.aliyuncs.com" % region_id
     params = {

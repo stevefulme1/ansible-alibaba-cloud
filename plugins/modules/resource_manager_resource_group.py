@@ -119,9 +119,7 @@ def main():
                     api_version="2020-03-31",
                 )
                 changed = True
-                module.exit_json(
-                    changed=changed, resource_manager_resource_group=result
-                )
+                module.exit_json(changed=changed, resource_manager_resource_group=result)
             else:
                 module.exit_json(
                     changed=False,

@@ -80,9 +80,7 @@ def main():
     spec = dict(
         state=dict(type="str", choices=["present", "absent"], default="present"),
         db_instance_id=dict(type="str"),
-        engine=dict(
-            type="str", choices=["MySQL", "SQLServer", "PostgreSQL", "MariaDB"]
-        ),
+        engine=dict(type="str", choices=["MySQL", "SQLServer", "PostgreSQL", "MariaDB"]),
         engine_version=dict(type="str"),
         db_instance_class=dict(type="str"),
         db_instance_storage=dict(type="int"),

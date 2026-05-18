@@ -77,9 +77,7 @@ def main():
         accelerator_id=dict(type="str", required=True),
         listener_id=dict(type="str"),
         port_ranges=dict(type="list", elements="dict"),
-        protocol=dict(
-            type="str", choices=["TCP", "UDP", "HTTP", "HTTPS"], default="TCP"
-        ),
+        protocol=dict(type="str", choices=["TCP", "UDP", "HTTP", "HTTPS"], default="TCP"),
     )
     spec.update(alibaba_argument_spec)
 

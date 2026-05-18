@@ -68,9 +68,7 @@ def main():
         state=dict(type="str", choices=["present", "absent"], default="present"),
         gateway_id=dict(type="str"),
         name=dict(type="str"),
-        gateway_class=dict(
-            type="str", choices=["Basic", "Standard", "Enhanced", "Advanced"]
-        ),
+        gateway_class=dict(type="str", choices=["Basic", "Standard", "Enhanced", "Advanced"]),
     )
     spec.update(alibaba_argument_spec)
 
