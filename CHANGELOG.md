@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.2] - 2026-05-18
+
+### Security
+- Add `secret: true` to inventory plugin access_key_secret option
+
 ## [2.2.1] - 2026-05-18
 
 ### Security
