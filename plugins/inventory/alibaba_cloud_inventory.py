@@ -34,7 +34,6 @@ options:
     description: Alibaba Cloud access key secret.
     type: str
     required: true
-    secret: true
     env:
       - name: ALIBABA_CLOUD_ACCESS_KEY_SECRET
   region_id:
