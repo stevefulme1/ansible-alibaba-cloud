@@ -121,6 +121,9 @@ def main():
                     api_version="2015-05-01",
                 )
                 changed = True
+                secret = result.get("AccessKeySecret", result.get("data", {}).get("AccessKeySecret", ""))
+                if secret:
+                    module.no_log_values.add(secret)
                 module.exit_json(changed=changed, ram_access_key=result)
             else:
                 module.exit_json(

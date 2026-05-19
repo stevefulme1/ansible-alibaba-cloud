@@ -3,3 +3,12 @@ __pycache__/
 *.egg-info/
 .ansible/
 .DS_Store
+.env
+.env.*
+*.pem
+*.key
+vault_pass*
+credentials*
+*.retry
+.vscode/
+.idea/

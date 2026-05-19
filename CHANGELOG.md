@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1] - 2026-05-18
+
+### Security
+- Fixed polardb_account password parameter no_log (was False, now True)
+- Added no_log_values protection for RAM access key secret in return value
+- Expanded .gitignore to exclude secrets, keys, credentials, and IDE files
+
 ## [2.0.0] - 2026-05-17
 
 ### Added
