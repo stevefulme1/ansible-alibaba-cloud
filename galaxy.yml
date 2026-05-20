@@ -1,13 +1,14 @@
 ---
 namespace: stevefulme1
 name: alibaba_cloud
-version: 2.3.0
+version: 0.1.0
 readme: README.md
 authors:
   - Steve Fulmer (@stevefulme1)
 description: >-
   Ansible collection for managing Alibaba Cloud resources.
   Full-scope coverage of ECS, VPC, SLB, RAM, KMS, and more.
+  Status: Pre-release. Under active development.
 license:
   - GPL-3.0-or-later
 tags:
