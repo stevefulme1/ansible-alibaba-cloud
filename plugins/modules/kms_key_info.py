@@ -45,7 +45,7 @@ EXAMPLES = r"""
 """
 
 RETURN = r"""
-keys:
+kms_keys:
   description: List of KMS keys.
   returned: success
   type: list
