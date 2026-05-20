@@ -12,3 +12,4 @@ credentials*
 *.retry
 .vscode/
 .idea/
+tests/output/
