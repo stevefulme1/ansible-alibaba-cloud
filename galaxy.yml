@@ -33,4 +33,3 @@ build_ignore:
   - changelogs
   - .gitignore
   - .DS_Store
-license_file: COPYING
