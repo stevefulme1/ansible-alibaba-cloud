@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.cen_bandwidth_package_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,44 +12,46 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: cen_bandwidth_package_info
+short_description: Query CEN bandwidth packages.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud CEN bandwidth packages.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  cen_bandwidth_package_id:
+    description: Filter by bandwidth package ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all CEN bandwidth packages
+  stevefulme1.alibaba_cloud.cen_bandwidth_package_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+
+- name: Query specific CEN bandwidth package
+  stevefulme1.alibaba_cloud.cen_bandwidth_package_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    cen_bandwidth_package_id: cbwp-123
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+cen_bandwidth_packages:
+  description: List of CEN bandwidth packages.
   returned: success
   type: list
   elements: dict
+  sample:
+    - cen_bandwidth_package_id: cbwp-123
+      bandwidth: 100
+      geographic_region_a_id: China
+      geographic_region_b_id: Asia-Pacific
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -62,9 +64,7 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        cen_bandwidth_package_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -82,24 +82,27 @@ def main():
     )
 
     params = {}
+    if module.params.get("cen_bandwidth_package_id"):
+        params["CenBandwidthPackageId"] = module.params["cen_bandwidth_package_id"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "DescribeCenBandwidthPackages",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="cbn.aliyuncs.com",
+            api_version="2017-09-12",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "CenBandwidthPackages.CenBandwidthPackage".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, cen_bandwidth_packages=data)
 
 
 if __name__ == "__main__":

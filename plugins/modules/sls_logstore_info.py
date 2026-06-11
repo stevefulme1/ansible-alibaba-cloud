@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.sls_logstore_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,41 +12,44 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: sls_logstore_info
+short_description: Query Log Service logstores.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud Log Service logstores.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  project_name:
+    description: Log Service project name.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
+    required: true
+  logstore_name:
+    description: Filter by logstore name.
+    type: str
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all logstores in a project
+  stevefulme1.alibaba_cloud.sls_logstore_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+    project_name: my-sls-project
+
+- name: Query specific logstore
+  stevefulme1.alibaba_cloud.sls_logstore_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    project_name: my-sls-project
+    logstore_name: app-logs
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+sls_logstores:
+  description: List of Log Service logstores.
   returned: success
   type: list
   elements: dict
@@ -62,9 +65,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        project_name=dict(type="str", required=True),
+        logstore_name=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -81,25 +83,30 @@ def main():
         timeout=module.params["timeout"],
     )
 
-    params = {}
+    params = {
+        "ProjectName": module.params["project_name"],
+    }
+    if module.params.get("logstore_name"):
+        params["LogstoreName"] = module.params["logstore_name"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "GetLogStore",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="sls.aliyuncs.com",
+            api_version="2020-12-30",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "logstore".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, sls_logstores=data)
 
 
 if __name__ == "__main__":

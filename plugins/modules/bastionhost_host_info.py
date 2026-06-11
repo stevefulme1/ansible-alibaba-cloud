@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.bastionhost_host_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,44 +12,54 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: bastionhost_host_info
+short_description: Query Bastion Host managed hosts.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about hosts managed by Alibaba Cloud Bastion Host.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  instance_id:
+    description: Bastion Host instance ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
+  host_id:
+    description: Filter by host ID.
+    type: str
+  host_name:
+    description: Filter by host name.
+    type: str
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all Bastion Host managed hosts
+  stevefulme1.alibaba_cloud.bastionhost_host_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+    instance_id: bastionhost-123
+
+- name: Query specific host
+  stevefulme1.alibaba_cloud.bastionhost_host_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    instance_id: bastionhost-123
+    host_id: host-456
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+bastionhost_hosts:
+  description: List of Bastion Host managed hosts.
   returned: success
   type: list
   elements: dict
+  sample:
+    - host_id: host-123
+      host_name: web-server-01
+      host_private_address: 192.168.1.100
+      os_type: Linux
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -62,9 +72,9 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        instance_id=dict(type="str"),
+        host_id=dict(type="str"),
+        host_name=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -82,24 +92,31 @@ def main():
     )
 
     params = {}
+    if module.params.get("instance_id"):
+        params["InstanceId"] = module.params["instance_id"]
+    if module.params.get("host_id"):
+        params["HostId"] = module.params["host_id"]
+    if module.params.get("host_name"):
+        params["HostName"] = module.params["host_name"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "ListHosts",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="yundun-bastionhost.aliyuncs.com",
+            api_version="2019-12-09",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "Hosts".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, bastionhost_hosts=data)
 
 
 if __name__ == "__main__":

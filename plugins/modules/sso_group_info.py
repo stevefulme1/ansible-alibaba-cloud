@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.sso_group_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,41 +12,44 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: sso_group_info
+short_description: Query CloudSSO groups.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud CloudSSO groups.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  directory_id:
+    description: CloudSSO directory ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
+    required: true
+  group_name:
+    description: Filter by group name.
+    type: str
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all CloudSSO groups
+  stevefulme1.alibaba_cloud.sso_group_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+    directory_id: d-xxxxx
+
+- name: Query specific CloudSSO group
+  stevefulme1.alibaba_cloud.sso_group_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    directory_id: d-xxxxx
+    group_name: developers
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+sso_groups:
+  description: List of CloudSSO groups.
   returned: success
   type: list
   elements: dict
@@ -62,9 +65,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        directory_id=dict(type="str", required=True),
+        group_name=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -81,25 +83,30 @@ def main():
         timeout=module.params["timeout"],
     )
 
-    params = {}
+    params = {
+        "DirectoryId": module.params["directory_id"],
+    }
+    if module.params.get("group_name"):
+        params["GroupName"] = module.params["group_name"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "ListGroups",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="cloudsso.aliyuncs.com",
+            api_version="2021-05-15",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "Groups".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, sso_groups=data)
 
 
 if __name__ == "__main__":

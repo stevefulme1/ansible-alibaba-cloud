@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.vpn_gateway_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,41 +12,41 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: vpn_gateway_info
+short_description: Query VPN gateways.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud VPN gateways.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  vpn_gateway_id:
+    description: Filter by VPN gateway ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
+  vpc_id:
+    description: Filter by VPC ID.
+    type: str
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all VPN gateways
+  stevefulme1.alibaba_cloud.vpn_gateway_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+
+- name: Query VPN gateways in a VPC
+  stevefulme1.alibaba_cloud.vpn_gateway_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    vpc_id: vpc-xxxxx
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+vpn_gateways:
+  description: List of VPN gateways.
   returned: success
   type: list
   elements: dict
@@ -62,9 +62,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        vpn_gateway_id=dict(type="str"),
+        vpc_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -82,24 +81,29 @@ def main():
     )
 
     params = {}
+    if module.params.get("vpn_gateway_id"):
+        params["VpnGatewayId"] = module.params["vpn_gateway_id"]
+    if module.params.get("vpc_id"):
+        params["VpcId"] = module.params["vpc_id"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "DescribeVpnGateways",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="vpc.aliyuncs.com",
+            api_version="2016-04-28",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "VpnGateways.VpnGateway".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, vpn_gateways=data)
 
 
 if __name__ == "__main__":

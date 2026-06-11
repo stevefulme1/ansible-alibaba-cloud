@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.hbr_backup_plan_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,44 +12,52 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: hbr_backup_plan_info
+short_description: Query Hybrid Backup Recovery backup plans.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud HBR backup plans.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  vault_id:
+    description: Backup vault ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
+  plan_id:
+    description: Filter by backup plan ID.
+    type: str
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all HBR backup plans
+  stevefulme1.alibaba_cloud.hbr_backup_plan_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+    vault_id: v-123
+
+- name: Query specific HBR backup plan
+  stevefulme1.alibaba_cloud.hbr_backup_plan_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    plan_id: plan-123
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+hbr_backup_plans:
+  description: List of HBR backup plans.
   returned: success
   type: list
   elements: dict
+  sample:
+    - plan_id: plan-123
+      plan_name: daily-backup
+      vault_id: v-123
+      schedule: "I|1602673264|PT2H"
+      retention: 7
+      disabled: false
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -62,9 +70,8 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        vault_id=dict(type="str"),
+        plan_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -82,24 +89,29 @@ def main():
     )
 
     params = {}
+    if module.params.get("vault_id"):
+        params["VaultId"] = module.params["vault_id"]
+    if module.params.get("plan_id"):
+        params["PlanId"] = module.params["plan_id"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "DescribeBackupPlans",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="hbr.aliyuncs.com",
+            api_version="2017-09-08",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "BackupPlans.BackupPlan".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, hbr_backup_plans=data)
 
 
 if __name__ == "__main__":

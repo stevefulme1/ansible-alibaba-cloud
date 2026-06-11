@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.acm_namespace_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,44 +12,45 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: acm_namespace_info
+short_description: Query ACM configuration namespaces.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud ACM configuration namespaces.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  namespace_id:
+    description: Filter by namespace ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query ACM namespaces
+  stevefulme1.alibaba_cloud.acm_namespace_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+
+- name: Query specific ACM namespace by ID
+  stevefulme1.alibaba_cloud.acm_namespace_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    namespace_id: example-namespace-id
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+acm_namespaces:
+  description: List of ACM namespaces.
   returned: success
   type: list
   elements: dict
+  sample:
+    - namespace_id: example-id
+      namespace_name: example-name
+      namespace_desc: example description
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -62,9 +63,7 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        namespace_id=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -82,24 +81,27 @@ def main():
     )
 
     params = {}
+    if module.params.get("namespace_id"):
+        params["NamespaceId"] = module.params["namespace_id"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "DescribeNamespace",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="acm.aliyuncs.com",
+            api_version="2020-02-06",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "Namespaces.Namespace".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, acm_namespaces=data)
 
 
 if __name__ == "__main__":

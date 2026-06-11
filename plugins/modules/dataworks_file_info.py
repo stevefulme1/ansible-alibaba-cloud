@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Ansible module: stevefulme1.alibaba_cloud.kms_key_info"""
+"""Ansible module: stevefulme1.alibaba_cloud.dataworks_file_info"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,44 +12,54 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: kms_key_info
-short_description: List KMS keys.
+module: dataworks_file_info
+short_description: Query DataWorks files.
 description:
-  - Retrieve information about Alibaba Cloud kms_key resources.
+  - Retrieve information about Alibaba Cloud DataWorks files.
 version_added: "1.0.0"
 author: Steve Fulmer (@stevefulme1)
 extends_documentation_fragment:
   - stevefulme1.alibaba_cloud.alibaba_cloud
 options:
-  key_id:
-    description: Filter by key ID.
+  project_id:
+    description: DataWorks project ID.
     type: str
-  limit:
-    description:
-      - Maximum number of results to return.
-    type: int
-    default: 100
-  offset:
-    description:
-      - Number of results to skip for pagination.
-    type: int
-    default: 0
+  file_id:
+    description: Filter by file ID.
+    type: str
+  file_name:
+    description: Filter by file name.
+    type: str
 """
 
 EXAMPLES = r"""
-- name: List KMS keys
-  stevefulme1.alibaba_cloud.kms_key_info:
+- name: Query all DataWorks files
+  stevefulme1.alibaba_cloud.dataworks_file_info:
     access_key_id: "{{ ak }}"
     access_key_secret: "{{ sk }}"
     region_id: cn-hangzhou
+    project_id: "12345"
+
+- name: Query specific DataWorks file
+  stevefulme1.alibaba_cloud.dataworks_file_info:
+    access_key_id: "{{ ak }}"
+    access_key_secret: "{{ sk }}"
+    region_id: cn-hangzhou
+    project_id: "12345"
+    file_id: "67890"
 """
 
 RETURN = r"""
-kms_keys:
-  description: List of KMS keys.
+dataworks_files:
+  description: List of DataWorks files.
   returned: success
   type: list
   elements: dict
+  sample:
+    - file_id: "67890"
+      file_name: etl_job.py
+      file_type: ODPS_PYTHON
+      owner_id: "user123"
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -62,9 +72,9 @@ from ansible_collections.stevefulme1.alibaba_cloud.plugins.module_utils.alibaba_
 
 def main():
     spec = dict(
-        limit=dict(type="int", default=100),
-        offset=dict(type="int", default=0),
-        key_id=dict(type="str"),
+        project_id=dict(type="str"),
+        file_id=dict(type="str"),
+        file_name=dict(type="str"),
     )
     spec.update(alibaba_argument_spec)
 
@@ -82,24 +92,31 @@ def main():
     )
 
     params = {}
+    if module.params.get("project_id"):
+        params["ProjectId"] = module.params["project_id"]
+    if module.params.get("file_id"):
+        params["FileId"] = module.params["file_id"]
+    if module.params.get("file_name"):
+        params["FileName"] = module.params["file_name"]
+
     try:
         result = client.get(
-            "ListKeys",
+            "ListFiles",
             params,
-            service_endpoint="kms.aliyuncs.com",
-            api_version="2016-01-20",
+            service_endpoint="dataworks.{region_id}.aliyuncs.com",
+            api_version="2020-05-18",
         )
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
     # Navigate dotted list_key to extract the list.
     data = result
-    for key in "Keys.Key".split("."):
+    for key in "Files.File".split("."):
         data = data.get(key, {})
     if not isinstance(data, list):
         data = []
 
-    module.exit_json(changed=False, kms_keys=data)
+    module.exit_json(changed=False, dataworks_files=data)
 
 
 if __name__ == "__main__":
