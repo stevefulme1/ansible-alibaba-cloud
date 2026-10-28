@@ -101,7 +101,7 @@ def main():
     # Navigate dotted list_key to extract the list.
     data = result
     for key in ["customDomains"]:
-        data = data.get(key, {})
+        data = data.get(key, {}) if isinstance(data, dict) else {}
     if not isinstance(data, list):
         data = []
 

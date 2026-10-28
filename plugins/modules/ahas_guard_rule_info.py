@@ -102,10 +102,11 @@ def main():
     except AlibabaCloudError as exc:
         module.fail_json(msg=str(exc))
 
-    # Navigate dotted list_key to extract the list.
-    data = result
-    for key in ["Data", "Datas"]:
-        data = data.get(key, {})
+    # Extract list from alternate response keys.
+    if isinstance(result, dict):
+        data = result.get("Data", result.get("Datas", []))
+    else:
+        data = []
     if not isinstance(data, list):
         data = []
 
